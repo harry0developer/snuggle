@@ -27,16 +27,15 @@ import { environment } from '../environments/environment';
 import { LocationService } from './service/location.service';
 import { ChatService } from './service/chat.service';
 import { WindowService } from './service/window.service';
-import { InternetPage } from './pages/internet/internet.page';
+import { FirebaseService } from './service/firebase.service';
 
 
 @NgModule({
-  declarations: [AppComponent, InternetPage],
-  imports: [BrowserModule,
+  declarations: [AppComponent],
+  imports: [
     IonicModule.forRoot(),
     BrowserModule, 
     FormsModule,
-    AppRoutingModule, 
     ReactiveFormsModule,
     HttpClientModule,
     AppRoutingModule,
@@ -44,18 +43,7 @@ import { InternetPage } from './pages/internet/internet.page';
     AngularFireAuthModule,
     AngularFirestoreModule,
     AngularFireStorageModule,
-    AngularFireDatabaseModule,
-
-    AppRoutingModule, 
-    ReactiveFormsModule,
-    HttpClientModule,
-    // IvyGalleryModule,
-    // BrMaskerModule,
-
-    AngularFireModule.initializeApp(environment.firebaseConfig),
-    AngularFireAuthModule,
-    AngularFirestoreModule,
-    AngularFireStorageModule,
+    AngularFireDatabaseModule, 
 
    //this was working but cannot get list of documents in a collection 
     provideFirebaseApp(() => initializeApp(environment.firebaseConfig)),
@@ -65,7 +53,7 @@ import { InternetPage } from './pages/internet/internet.page';
 
   ],
   providers: [
-    // FirebaseService,
+    FirebaseService,
     LocationService,
     ChatService,
     WindowService,

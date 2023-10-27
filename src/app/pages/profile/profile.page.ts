@@ -1,7 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-// import { Gallery } from 'angular-gallery';
 import { LoadingController, ModalController, Platform } from '@ionic/angular';
-import { Router } from '@angular/router';
 import { SettingsModalPage } from '../settings-modal/settings-modal.page';
 import { ActionSheetController } from '@ionic/angular';
 import { Camera,  CameraResultType, CameraSource } from '@capacitor/camera';
@@ -30,20 +28,17 @@ export class ProfilePage implements OnInit{
     // private gallery: Gallery, 
     private firebaseService: FirebaseService,
     private modalCtrl: ModalController,
-    private platform: Platform,
     private actionSheetController: ActionSheetController,
     private loadingCtrl: LoadingController,
     private auth: Auth,
-    private router: Router
     ) {}
 
 
   async ngOnInit() {
     this.isLoading = true;
     this.currentUser = this.auth.currentUser;
-    await this.firebaseService.getCurrentUser().then((user: any) => {
+    await this.firebaseService.getCurrentUser().then((user: any) => {      
       this.user = user;
-      console.log(user);
       this.isLoading = false;
     }).catch(err => {
       console.log(err);

@@ -1,9 +1,6 @@
 import { Component } from '@angular/core'; 
 import { LoadingController, ModalController, Platform } from '@ionic/angular';
-import { InternetPage } from './pages/internet/internet.page';
 import { LocationService } from './service/location.service';
-import { LocationPage } from './pages/location/location.page';
-import { SERVICE, STORAGE } from './utils/const';
 import { FirebaseService } from './service/firebase.service';
 import { SplashScreen } from '@capacitor/splash-screen';
 
@@ -15,11 +12,8 @@ import { SplashScreen } from '@capacitor/splash-screen';
 export class AppComponent{
   location: any;
   constructor(
-    private locationService: LocationService,
-    private loadingCtrl:LoadingController,
-    private firebaseService: FirebaseService,
-    private platform: Platform,
-    private modalCtrl: ModalController) {
+
+    private platform: Platform) {
 
       this.platform.ready().then(() => {
          

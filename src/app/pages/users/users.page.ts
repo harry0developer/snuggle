@@ -104,6 +104,8 @@ export class UsersPage implements OnInit {
   async setCurrentUser() {
     await this.firebaseService.getCurrentUser().then((user: any) => {
       this.currentUser = user;
+      console.log("Current user ", user);
+      
       this.firebaseService.setStorage(STORAGE.USER, user);
       if(!user.profile_picture) {
         // this.showAlert("Incomplete profile", "Please add your profile picture before you can start swiping", "Go to profile")

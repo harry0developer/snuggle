@@ -162,16 +162,18 @@ export class FirebaseService {
 
 
   async getCurrentUser() {
-    const docRef = doc(this.firestore, COLLECTION.USERS)
-    const docSnap = await getDoc(docRef);
+
+    return this.getDocumentFromFirebase(COLLECTION.USERS, this.auth.currentUser.uid);
+    // const docRef = doc(this.firestore, COLLECTION.USERS)
+    // const docSnap = await getDoc(docRef);
     
-    if (docSnap.exists()) {
-      return docSnap.data();
-    } else {
-      // doc.data() will be undefined in this case
-      console.log("No such document!");
-      return null
-    }
+    // if (docSnap.exists()) {
+    //   return docSnap.data();
+    // } else {
+    //   // doc.data() will be undefined in this case
+    //   console.log("No such document!");
+    //   return null
+    // }
   }
  
 
