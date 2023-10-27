@@ -1,0 +1,51 @@
+<ion-header>
+  <ion-toolbar mode="md">
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+    <ion-title>{{reciever?.name}}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <div class="messages-container"  #scrollMe *ngIf="messagesArray && messagesArray.length > 0" >
+    <div class="imessage" *ngFor="let m of messagesArray">
+      
+      <div class="from-me-date" *ngIf="fromMe(m)">{{getSentDate(m)}}</div>
+      <p class="from-me" *ngIf="fromMe(m)">
+        {{m.msg}}
+      </p>
+
+      <div class="from-them-date" *ngIf="!fromMe(m)">{{getSentDate(m)}}</div>
+      <p class="from-them" *ngIf="!fromMe(m)">
+        {{m.msg}}
+      </p>
+    </div>
+  </div>
+
+
+  <div class="no-messages" *ngIf="messagesArray && messagesArray.length < 1">
+    <h1>No messages yet</h1>
+    <p>you do not have any messages yet</p>
+  </div>
+ 
+</ion-content>
+
+<ion-footer>
+  <ion-toolbar color="light">
+    <ion-row class="ion-align-items-center">
+      <ion-col size="10">
+        <ion-textarea autoGrow="true" class="message-input" rows="1" maxLength="500" [(ngModel)]="newMsg">
+          
+        </ion-textarea>
+      </ion-col>
+      <ion-col size="2">
+        <ion-button expand="block" fill="clear" color="primary" [disabled]="newMsg == ''"
+          class="msg-btn" (click)="sendMessage()">
+          Send
+        </ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-toolbar>
+</ion-footer>

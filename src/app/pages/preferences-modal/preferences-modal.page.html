@@ -1,0 +1,51 @@
+<ion-header>
+  <ion-toolbar> 
+    <ion-buttons slot="end">
+      <ion-button (click)="cancel()">Cancel</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+  
+<ion-content class="ion-padding preferences">
+ 
+  <h1>Preferences </h1> 
+
+  <form class="modal-form" [formGroup]="preferencesForm">
+    <div class="preference-item">
+      <ion-label>I am looking for </ion-label>
+      <ion-item class="item-choose"> 
+        <ion-select
+        formControlName="want"
+        interface="action-sheet"
+        placeholder="I am looking for"
+        [multiple]="true">
+          <ion-select-option value="No Strings Attached">No Strings Attached</ion-select-option>
+          <ion-select-option value="Friends With Benefits">Friends With Benefits</ion-select-option>
+          <ion-select-option value="One Night Stand">One Night Stand</ion-select-option> 
+        </ion-select>
+      </ion-item>
+    </div>
+
+    <div class="preference-item">
+      <ion-label>With</ion-label>
+      <ion-item class="item-choose"> 
+        <ion-select
+          formControlName="with"
+          interface="action-sheet"
+          placeholder="With who"
+          [multiple]="true"> 
+            <ion-select-option value="Male">Male</ion-select-option>
+            <ion-select-option value="Female">Female</ion-select-option>
+            <ion-select-option value="Gay Couple">Gay Couple</ion-select-option>
+            <ion-select-option value="Lesbian Couple">Lesbian Couple</ion-select-option>
+            <ion-select-option value="Transgender">Transgender</ion-select-option> 
+        </ion-select>
+      </ion-item> 
+    </div>
+  </form>
+
+  <div class="controls">
+    <ion-button shape="round" expand="block" [disabled]="!preferencesForm.valid"  (click)="savePreferences()">Save</ion-button>
+  </div>
+</ion-content>

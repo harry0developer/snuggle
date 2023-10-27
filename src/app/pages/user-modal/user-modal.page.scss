@@ -1,0 +1,39 @@
+ion-content {
+    --ion-background-color:#f5f6f9;
+}
+
+.user-preview {
+    margin-top: 10px;
+    height: 90vh;
+    .scroll {
+        height: 80vh;
+        overflow: scroll;
+        img {
+            width: 100%;
+            object-fit: cover;
+        }
+    }
+
+    .fixed-scroll {
+        background-color: #FFF;
+        position: relative;
+        bottom: 75px;
+        .info{
+            padding: 16px;
+            color: #000;
+            h1 {
+                font-size: 28px;
+                font-weight: bold;
+                margin: 0;
+            }
+            p {
+                margin: 0 0 10px 0;
+                font-size: 18px;
+                
+            }
+            .extra {
+                width: 100px;
+            }
+        }
+    }
+}

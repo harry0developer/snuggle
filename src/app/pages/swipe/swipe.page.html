@@ -1,0 +1,79 @@
+<ion-header [translucent]="true"class="ion-no-border">
+  <ion-toolbar mode="md">
+    <ion-title text-center>
+     <!-- <img class="logo" src="../../../assets/logo.png" alt=""> Hooked -->
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+<!-- 
+<ion-content> 
+  <div class="user-card-container" *ngIf="users.length > 0; else emptyTemplate">
+    <ion-card class="user-card" *ngFor="let user of users; let i =index"  id="{{'card-' + user.id}}"
+      [style.zindex]="user.length - 1" (touchstart)="touchStart($event)" (touchmove)="touchMove($event, i)"
+      (touchend)="touchEnd(i)"
+    >
+      <img [src]="user.picture" />
+      <div class="user-info">
+        <h1>{{user.name}}, {{user.age}}</h1>
+        <p>
+          <ion-icon name="home-outline"></ion-icon>
+          Lives in {{user.location}} </p>
+        <p>
+          <ion-icon name="location-outline"></ion-icon>
+          {{user.distance}}km away</p>
+      </div>
+   
+    </ion-card>
+
+    <ion-icon name="heart-dislike" class="icon" color="danger" id="reject-icon"></ion-icon>
+    <ion-icon name="heart" class="icon" color="primary" id="accept-icon"></ion-icon>
+
+  </div>
+
+  <ng-template #emptyTemplate>
+    <div class="no-swipes">
+      <h1>That's all for you!</h1>
+      <p>Change your filter and expand your distance settings to see more people.</p>
+    </div>
+  </ng-template>
+</ion-content> -->
+
+
+<ion-content>
+
+
+
+<div class="users" *ngIf="users.length > 0; else emptyTemplate">   
+  <div class="user" *ngFor="let user of users; let i = index;"
+   [style.zIndex]="users.length - i"
+   (touchstart)="touchStart($event)"
+    (touchmove)="touchMove($event, i)"
+    (touchend)="touchEnd(i)" id="{{'card-' + i}}">
+    <ion-card mode="ios">
+      <ion-card-content mode="md">
+        <img src="{{user.picture}}" alt="">
+        <ion-item lines="none">
+          <ion-label>
+            <h2>{{user.name}}</h2>
+            <p>{{user.age}}, {{user.distance}} </p>
+          </ion-label>
+        </ion-item>
+      </ion-card-content>
+    </ion-card>
+
+  </div>
+
+  <ion-icon name="heart-dislike" class="icon" color="danger" id="rejected-icon"></ion-icon>
+  <ion-icon name="heart" class="icon" color="primary" id="accepted-icon"></ion-icon>
+
+
+</div>
+
+<ng-template #emptyTemplate>
+  <div class="no-swipes">
+    <h1>That's all for you!</h1>
+    <p>Change your filter and expand your distance settings to see more people.</p>
+  </div>
+</ng-template>
+
+</ion-content>

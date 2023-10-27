@@ -1,0 +1,19 @@
+<div class="user-card-container">
+
+  <ion-card class="card user-card" id="{{'card-' + user.uid}}">
+    <img [src]="user.profile_picture" />
+    <div class="user-info">
+      <h1>{{user.name}}, {{ getUserAge(user)}}</h1>
+      <p>
+        <ion-icon name="location-outline"></ion-icon>
+        12km away
+      </p>
+    </div>
+      
+    <div class="show-more">
+      <ion-icon color="primary"  name="arrow-up-circle-outline"></ion-icon>
+    </div>
+    <ion-icon name="heart-dislike" class="icon" id="rejected-icon"></ion-icon>
+    <ion-icon name="heart" class="icon" id="accepted-icon"></ion-icon>
+  </ion-card>
+</div>

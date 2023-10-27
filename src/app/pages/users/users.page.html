@@ -1,0 +1,73 @@
+<ion-header [translucent]="true"class="ion-no-border">
+  <ion-toolbar mode="md">
+    <ion-title text-center>
+     <img class="logo" src="../../../assets/snuggle-primary.png" alt=""> 
+    </ion-title>
+    <ion-buttons slot="secondary">
+      <ion-button (click)="openModal('filter')">
+        <ion-icon slot="icon-only" name="filter-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content> 
+  <div id="parent" class="user-card-container" *ngIf="usersLoaded$ | async; else loadingTemplate">
+    <ion-card class="card user-card" *ngFor="let user of usersWithDistance; let i =index"  id="{{'card-' + user.uid}}">
+      <img class="swipe-img" [src]="user.profile_picture" />
+      <div class="user-info">
+        <h1 class="title">
+          {{user.name}}, {{ getUserAge(user)}}
+          <img *ngIf="user?.isVerified" class="verified" src="../../../assets/generic/verify.png" alt="">
+        </h1>
+        <p>
+          <ion-icon name="location-outline"></ion-icon>
+          {{user.location.distance ? user.location.distance + 'km away': 'Near by'}}
+        </p>
+      </div>
+
+      <div class="show-more">
+        <ion-icon color="primary" (click)="showUserModal(user)" name="arrow-up-circle-outline"></ion-icon>
+      </div>
+        <!-- <ion-icon name="heart-dislike" class="icon" id="rejected-icon"></ion-icon> -->
+        <ion-icon name="close-outline" class="icon"  id="rejected-icon"></ion-icon>
+        <ion-icon name="heart" class="icon" id="accepted-icon"></ion-icon>
+    </ion-card>
+
+    <div class="no-swipes" *ngIf="usersWithDistance.length < 1">
+      <h1>You ran out of people</h1>
+      <p>Adjust your distance settings to see more people</p>
+  
+      <!-- <ion-label>
+        Distance within
+       <span slot="end">{{distanceFilter.value}} km</span>
+      </ion-label> -->
+
+      <ion-item lines="none">
+        <ion-label>Distance within</ion-label>
+        <span slot="end">{{distanceFilter.value}} km</span>
+      </ion-item>
+      <ion-range aria-label="distance settings"
+        [min]="distanceFilter.min"
+        [max]="distanceFilter.max"
+        [value]="distanceFilter.value"
+        [pinFormatter]="pinFormatter" (ionChange)="filterChange($event)">
+      </ion-range>
+
+      <ion-button shape="round" (click)="applyDistanceFilter()">Apply</ion-button>
+    </div>
+  </div>
+
+
+  
+  <ng-template #loadingTemplate>
+    <div class="is-loading">
+      <img src="../../../assets/loading.gif" alt="">
+      <h1>Loading users...</h1>
+      <p>This should not take long. Hang on tight...</p>
+    </div>
+  </ng-template>
+ 
+
+</ion-content>
+ 

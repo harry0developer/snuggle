@@ -1,0 +1,58 @@
+<ion-header [translucent]="true"class="ion-no-border">
+  <ion-toolbar mode="md">
+    <ion-title class="title" text-center>
+      Chats
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <div class="users-wrapper" *ngIf="matches && matches.length > 0">
+    <ul class="user">
+      <div *ngFor="let user of matches" class="item">
+        <ion-avatar (click)="openChats(user)">
+          <img [alt]="user?.name" [src]="user?.profile_picture ? user.profile_picture : defaultImage" />
+
+          <!-- <img [alt]="user?.name" [src]="user?.profile_picture ? user.profile_picture : defaultImage" /> -->
+        </ion-avatar> 
+        <p (click)="openChats(user)">{{user.name  ? (user.name  | titlecase) : "Unknown"}}</p>
+       </div> 
+    </ul>
+    <!-- <ul class="user" *ngIf="matches.length < 1">
+      <div class="item">
+        <ion-avatar>
+          <img [src]="defaultImage" />
+          <p>Matches</p>
+        </ion-avatar>  
+      </div> 
+    </ul> -->
+  </div>
+  
+   <div class="container" *ngIf="!isLoading; else emptyTemplate">
+    <ion-list lines="none" *ngIf="activeChats && activeChats.length > 0">
+      <ion-item class="bg" *ngFor="let user of activeChats; let i = index" (click)="openChats(user)">
+        <ion-avatar slot="start" >
+          <img [alt]="user?.name" [src]="user?.profile_picture ? user.profile_picture : defaultImage" />
+        </ion-avatar>  
+        <ion-label>
+          <h3>{{user?.name}}</h3>
+          <p slot="end" class="sent-message"> <ion-icon *ngIf="user?.lastMsg?.from === currentUser.uid" slot="start" name="return-up-back-outline"></ion-icon>{{user?.lastMsg?.msg}}</p>
+        </ion-label>
+        <p slot="end">{{ getLastSendDate(user) }}</p>
+      </ion-item>
+    </ion-list>
+
+    <div class="is-loading" *ngIf="activeChats && activeChats.length < 1">
+      <h1>You don't have active chats available</h1>
+      <p>Start swipping, to start chatting with your match.</p>
+    </div>
+  </div> 
+ 
+  <ng-template #emptyTemplate>
+    <div class="is-loading">
+      <img src="../../../assets/loading.gif" alt="">
+      <h1>Loading Chats...</h1>
+      <p>This should not take long. Hang on tight...</p>
+    </div>
+  </ng-template>
+</ion-content> 

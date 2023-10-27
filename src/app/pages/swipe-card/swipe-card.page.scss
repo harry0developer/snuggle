@@ -1,0 +1,59 @@
+
+.user-card-container {
+  position: relative;
+  height: calc(100vh - 120px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  .user-card { 
+    position: absolute;
+    width: 95vw;
+    height: 100%;
+    box-shadow: rgba(0, 0, 0, 0.2) 0px -50px 36px -28px inset;
+    img {
+      width: 100vw;
+      object-fit: center;
+      object-position: top;
+      mask-image: linear-gradient(to bottom, #000, #000, transparent);
+    }
+    .user-info {
+      position: absolute;
+      bottom: 20px; //change this to 80px to controller
+      color: #000;
+      text-align: center;
+      width: 100%;
+      h1 {
+        font-size: 19px;
+        padding-bottom: 12px;
+        font-weight: bold;
+      }
+      p {
+        font-size: 16px;
+      }
+      h1, p {
+        padding: 0;
+        margin: 0;
+      }
+    } 
+  }
+}
+
+.no-swipes {
+  text-align: center;
+  height: 50vh;
+  margin-top: 25vh;
+  padding: 20px;
+  
+  h1 {
+    text-align: center;
+    font-weight: bold;
+    font-size: 20px;
+  }
+}
+
+.show-more {
+  position: absolute;
+  right: 20px;
+  bottom: 20px;
+  font-size: 45px;
+}

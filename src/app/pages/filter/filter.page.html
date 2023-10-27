@@ -1,0 +1,60 @@
+<ion-header>
+  <ion-toolbar> 
+    <ion-buttons slot="end">
+      <ion-button (click)="cancel()">Cancel</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+  
+
+<ion-content>
+
+  
+  <div class="container">
+    <h1 class="title">Filter by distance</h1>
+
+
+    <div class="distance-item">
+      <!-- <ion-item lines="none">
+        <ion-label>
+          Prefered Distance
+        </ion-label>
+        <p class="value">{{distance}} KM</p>
+      </ion-item> -->
+
+      <ion-item lines="none">
+        <ion-label>Distance within</ion-label>
+        <span slot="end">{{distanceFilter.value}} km</span>
+      </ion-item>
+      <ion-range aria-label="distance settings"
+        [min]="distanceFilter.min"
+        [max]="distanceFilter.max"
+        [value]="distanceFilter.value"
+        [pinFormatter]="pinFormatter" (ionChange)="filterChange($event)">
+      </ion-range>
+
+      <!-- <ion-range [value]="distance" [min]="distanceFilter.min" [max]="distanceFilter.max" (ionChange)="onIonChangeDistance($event)"></ion-range> -->
+    </div>
+
+
+    <!-- <h1 class="title">By Age</h1>
+    <div class="distance-item">
+      <ion-item lines="none">
+        <ion-label>
+          Prefered Age
+        </ion-label>
+        <p>between <span class="value">{{min}} </span> and <span class="value">{{max}}</span></p>
+      </ion-item>
+      <ion-range (ionChange)="onIonChangeAge($event)" min="18" max="60" [dualKnobs]="true" [value]="{ lower: 18, upper: 60 }"></ion-range>
+    </div> -->
+ 
+    <div class="btn">
+      <!-- <ion-button shape="round" fill="outline" (click)="cancel()">Cancel</ion-button> -->
+
+      <ion-button shape="round" fill="solid" (click)="applyFilter()">Apply filter</ion-button>
+    </div>
+  </div>
+
+
+</ion-content>

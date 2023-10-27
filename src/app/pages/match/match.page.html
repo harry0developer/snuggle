@@ -1,0 +1,22 @@
+<ion-header> </ion-header>
+
+<ion-content>
+  <div class="bg-img background-tint" [style.background-image]="'url(' + user?.profile_picture + ')'">
+    <div class="content">
+      <div class="lottie-animation mt-10">
+        <ng-lottie
+          [options]="options" 
+          (animationCreated)="onAnimate()">
+        </ng-lottie>
+      </div>
+
+      <h1>It's a Match</h1>
+      <h2>You have matched with <b>{{user.name}}</b></h2>
+      
+      <div class="btn-group">
+        <ion-button shape="round" expand="block" fill="solid" (click)="startChatting()">Start chatting</ion-button>
+        <ion-button shape="round" expand="block" fill="outline" (click)="continueSwipping()" >Continue swipping</ion-button>
+      </div>
+    </div>
+  </div>
+</ion-content>

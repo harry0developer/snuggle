@@ -1,0 +1,28 @@
+<ion-header></ion-header>
+
+<ion-content>
+
+  <div class="logo">
+    <img src="../../../assets/logo.png" alt="">
+  </div>
+
+  <div class="container">
+    <h1>Almost there</h1>
+
+    <h3>We have sent a confirmation email to <strong>{{user?.email}}</strong>.</h3>
+    <p>Please check your email and click on the link to verfiy your email address.</p>
+    <p>Once your email address is verified, click verification complete button</p>
+
+    
+    <div class="btn">
+      <ion-button shape="round" expand="block" (click)="completeVerification()">Verification Complete</ion-button>
+    </div>
+     
+    <p class="not-registered">
+      Did not recieve an email <br/> <a (click)="goLoginPage()">Resend verifcation email.</a>
+    </p>
+    <p class="not-registered">
+      Go back to <a (click)="goLoginPage()">Sign In.</a>
+    </p>
+  </div>
+</ion-content>

@@ -1,0 +1,49 @@
+
+.auth-page {
+  text-align: center;
+  background: #762b69;
+  height: 100vh;
+  .logo {
+    height: 45vh; 
+    img {
+      width: 160px;
+      margin-top: 10vh;
+    }
+    .tagline {
+      color: white;
+      margin: 0 40px;
+    }
+  } 
+
+  .bottom { 
+    height: 50vh;
+    line-height: 1;
+    color: #fff;
+    .padding {
+      margin: 10px 40px;
+    }
+    
+    h1 {
+      font-size: 36px;
+      font-weight: 900;
+      line-height: 1;
+
+    }
+    p {
+      font-size: 16px;
+      margin: 0;
+      padding: 0 0 20px 0;
+    }
+    ion-button {
+      height: 50px;
+      --background: #fff;
+      --color:#762b69;
+      font-weight: bold;
+    }
+    .terms-conditions {
+      color: #ab4699;
+      margin: 20px 40px;
+    }
+  }
+}
+  

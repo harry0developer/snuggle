@@ -1,0 +1,7 @@
+{
+  "name": "snuggle",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}

@@ -1,0 +1,30 @@
+.preferences {
+    h1 {
+        font-size: 32px;
+        font-weight: bold;
+    }
+    .controls {
+        width: 65%;
+        margin: 10% auto;
+        ion-button {
+            height: 45px;
+        }
+    }
+
+    
+}
+
+
+.preference-item {
+    padding: 20px;
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
+    margin: 10px 0;
+    ion-label { 
+        font-weight: bold;
+        font-size: 16px;
+    }
+
+}
+::ng-deep .alert-wrapper.ion-overlay-wrapper{
+    width: 100%;
+}

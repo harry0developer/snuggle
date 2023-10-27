@@ -1,0 +1,144 @@
+
+::-webkit-scrollbar {
+    display: none;
+} 
+ 
+
+.modal-form {
+    width: 100%;
+    padding: 20px; 
+}
+  
+.btn-group {
+    text-align: center;
+    margin-top: 40px;
+    ion-button {
+      min-width: 140px;
+      height: 50px;
+    }
+}
+
+.summary.btn-group {
+    height: 90px;
+}
+
+.modal-container {
+  .counter {
+    width: 100px;
+    border-radius: 0 40px 40px 0;
+    margin: 20px 0;
+    font-size: 16px;
+    font-weight: bold;
+    padding: 10px;
+    background-color: lightblue;
+    color: white;
+  }
+
+  
+  .container {
+    .title {
+      padding-left: 40px;
+      line-height: 1;
+      h1 {
+        margin: 0;
+        padding: 0;
+        font-size: 24px;
+        font-weight: bold;
+      }
+      p {
+        margin: 0;
+        padding: 0;
+        font-size: 16px;
+      }
+      
+    }
+
+    .item-choose {
+      font-size: 20px;
+      margin: 20px;
+    }
+    
+    
+    ion-input.border, ion-select  { 
+      margin: 4px 0;
+      border: 2px solid #762b69;
+      border-radius: 6px;
+      font-size: 18px;
+      --padding-start: 10px;
+      
+    }
+
+    ion-select {
+      width: 100%;
+    }
+
+    ion-label {
+      color: #762b69;
+      font-size: 18px;
+      font-weight: bold;
+    }
+
+    .validation-errors {
+      padding-left: 20px;
+      .error-message {
+          font-size: 16px;
+          color: #762b69;
+          line-height: 1 !important;
+        }
+      }
+    }
+
+    .summary { 
+      .item {
+        margin: 10px 20px;
+        .gender {
+            padding-right: 16px;
+            font-size: 30px;
+        }
+        h1 {
+            font-size: 18px;
+            font-weight: bold;
+        }
+        p {
+            font-size: 16px;
+        }
+      }
+    }
+ }
+
+ .reset-password {
+    margin-top: 10px;
+ }
+  
+  
+ion-modal::part(backdrop) {
+    background: rgba(209, 213, 219);
+    opacity: 1;
+}
+
+ion-modal ion-toolbar {
+    --background: rgb(102, 63, 89);
+    --color: white;
+}
+
+p.signin {
+    padding-top: 10px !important;
+}
+
+::ng-deep  {
+  .alert-checkbox-label {
+      overflow-wrap: normal;
+      white-space: break-spaces !important;
+  }
+  .alert-wrapper {
+      width: 100% !important;
+  }
+
+  .cancel {
+    margin-top: 100px;
+  }
+}
+  
+  
+  
+  

@@ -1,0 +1,136 @@
+
+::-webkit-scrollbar {
+    display: none;
+} 
+ 
+
+.counter {
+  width: 100px;
+  border-radius: 0 40px 40px 0;
+  margin: 20px 0;
+  font-size: 16px;
+  font-weight: bold;
+  padding: 10px;
+  background-color: lightblue;
+  color: white;
+}
+
+.counter-otp {
+  width: 160px;
+  border-radius: 0 40px 40px 0;
+  margin: 20px 0;
+  font-size: 16px;
+  font-weight: bold;
+  padding: 10px;
+  background-color: #762b69;
+  color: white;
+}
+ 
+.container {
+  padding: 20px;
+}
+
+.title {
+  padding-left: 10px;
+  padding-bottom: 14px;
+  line-height: 1;
+  h1 {
+    margin: 20px 0 0 0;
+    padding: 0;
+    font-size: 24px;
+    font-weight: bold;
+  }
+  p {
+    margin: 0;
+    padding: 0;
+    font-size: 16px;
+  }
+ 
+}
+
+
+.validation-errors {
+  padding: 10px 0;
+  font-size: 16px;
+  color: #762b69;
+  text-align: center;
+  line-height: 1 !important;
+}
+
+   
+.modal-form {
+  width: 100%;
+  padding-bottom: 0;
+  .country-code, .phone-number, .otp-code{
+    border: 2px solid #762b69;
+    border-radius: 4px;
+    font-size: 18px;
+  }
+
+  .otp-code {
+    width: 200px;
+    text-align: center;
+    margin: 0 auto;
+    font-size: 18px;
+  }
+  
+}
+  
+.otp-form {
+  display: flex;
+  justify-content: space-evenly;
+  margin: 20px 0;
+  .otp-item {
+    background-color: #f2f2f2;
+    color: #000;
+    width: 50px;
+    height: 50px; 
+    border-radius: 4px; 
+    padding: 4px 4px 0 10px;
+    font-size: 21px;
+    font-weight: bold;
+
+  }
+}
+
+.btn-group {
+  text-align: center;
+  margin-top: 40px;
+  margin-bottom: 30px;
+  ion-button {
+    min-width: 140px;
+    height: 50px;
+  }
+}
+
+ion-modal::part(backdrop) {
+  background: rgba(209, 213, 219);
+  opacity: 1;
+}
+
+ion-modal ion-toolbar {
+  --background: rgb(102, 63, 89);
+  --color: white;
+}
+
+p.signin {
+  padding-top: 10px !important;
+}
+
+::ng-deep  {
+  .alert-checkbox-label {
+      overflow-wrap: normal;
+      white-space: break-spaces !important;
+  }
+  .alert-wrapper {
+      width: 100% !important;
+  }
+
+  .cancel {
+    margin-top: 100px;
+  }
+}
+  
+  
+  
+  
