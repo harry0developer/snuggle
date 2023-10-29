@@ -2,13 +2,13 @@
 <ion-header> </ion-header>
 
 <ion-content class="modal-container"> 
-  <div class="counter" *ngIf="activeStep <= 6">Step {{activeStep + 1}}/6</div>
+  <div class="counter" *ngIf="activeStep <= 5">Step {{activeStep + 1}}/5</div>
 
   <!-- Step one  -->
   <div class="container" *ngIf="activeStep == 0">
     <div class="title">
-      <h1>Sign up with email address</h1>
-      <p>Use your email address and create a new password</p>
+      <h1>Sign up with email</h1>
+      <p>We will send you a verification link to this email address</p>
     </div>
     <form class="modal-form" [formGroup]="validations_form">
       <ion-item mode="ios" lines="none">
@@ -138,39 +138,7 @@
         </ion-button>
       </div>
     </form>
-  </div>
-
-  <!-- Step 5 -->
-  <!-- <div class="container" *ngIf="activeStep == 4">
-    <div class="title">
-      <h1>What's your sexual orientation?</h1>
-      <p>This helps us find the right match for you</p>
-    </div>
-
-    <form class="modal-form" [formGroup]="signup_form">
-      <ion-item class="item-choose" lines="none"> 
-        <ion-select
-          formControlName="orientation"
-          interface="action-sheet"
-          placeholder="Select sexual orientation">
-            <ion-select-option value="Straight">Straight</ion-select-option>
-            <ion-select-option value="Lesbian">Lesbian</ion-select-option>
-            <ion-select-option value="Gay">Gay</ion-select-option>
-            <ion-select-option value="Bi">Bi</ion-select-option>
-            <ion-select-option value="Transgender">Transgender</ion-select-option>
-        </ion-select>
-      </ion-item>
-      <div class="btn-group" >
-        <ion-button shape="round" fill="outline" (click)="back()">
-          Back
-        </ion-button>
-        <ion-button shape="round" [disabled]="!signup_form.get('orientation').valid" (click)="next()">
-          Next
-        </ion-button>
-      </div>
-    </form>
-  </div> -->
-
+  </div> 
 
   <!-- Step 5 -->
   <div class="container" *ngIf="activeStep == 4">
@@ -214,15 +182,15 @@
         <ion-button shape="round" fill="outline" (click)="back()">
           Back
         </ion-button>
-        <ion-button shape="round" [disabled]="!signup_form.get('with').valid" (click)="sendVerificationCode()">
-          Next
+        <ion-button shape="round" [disabled]="!signup_form.get('with').valid" (click)="createAccount()">
+          Create Account
         </ion-button>
       </div> 
     </form>
   </div>
 
   <!-- Step 6 OTP -->
-  <div class="container" *ngIf="activeStep == 5">
+  <!-- <div class="container" *ngIf="activeStep == 5">
     <div class="title">
       <h1>We have sent a verification code to {{email}}</h1>
       <p>Please enter the verification code below:</p>
@@ -271,7 +239,7 @@
         Cancel creating account
       </ion-button> 
     </div>
-  </div>
+  </div> -->
  
 
 </ion-content>

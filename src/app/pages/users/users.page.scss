@@ -29,10 +29,11 @@
       position: absolute;
       bottom: 20px; //change this to 80px to controller
       color: #000;
-      text-align: center;
+      text-align: left;
+      padding-left: 20px;
       width: 100%;
       h1 {
-        font-size: 24px;
+        font-size: 22px;
         padding-bottom: 6px;
         font-weight: bold;
       }
@@ -73,7 +74,7 @@
 .modal-container {
   margin-bottom: 40px;
   .divider {
-      background-color: lightblue;
+      background-color: #762b69;
       padding: 19px 20px;
       font-size: 18px;
       font-weight: bold;
@@ -120,6 +121,7 @@
   font-size: 100px;
 }
 
+
 #rejected-icon, #accepted-icon {
   color: #FFF;
   background-color: #762b69;
@@ -127,15 +129,13 @@
   padding: 20px;
   width: 50px;
   height: 50px;
-}
+} 
 
-// #accepted-icon {
-//   color: #FFF;
-//   background-color: #000;
-// }
+::ng-deep {
 
-::ng-deep ion-card {
-  box-shadow: rgba(0, 0, 0, 0.04) 0px 3px 5px;
+  ion-card {
+    box-shadow: rgba(0, 0, 0, 0.04) 0px 3px 5px;
+  } 
 }
 
 .verified {

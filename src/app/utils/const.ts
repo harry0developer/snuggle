@@ -53,8 +53,15 @@ export const STATUS = {
     SUCCESS: 'success',
     FAILED: 'failed'
 }
+
+export const LOGIN_TYPE = {
+    EMAIL: 'email',
+    PHONE: 'phone'
+}
+
 export const ROUTES = {
     AUTH: "auth",
+    REAUTH: "re-auth",
     SIGNUP: "signup",
     USERS: "tabs/users",
     CHATS: "tabs/chats",

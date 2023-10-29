@@ -32,7 +32,7 @@ import moment from 'moment';
 export class UsersPage implements OnInit {
   users$: any;
   currentUser: any;
-  defaultImage = '../../../assets/default/default.jpg';
+  defaultImage = '../../../assets/default.jpg';
   location: Geo;
   allUsers: User[] = [];
   users: User[] = [];
@@ -65,22 +65,7 @@ export class UsersPage implements OnInit {
     private loadingCtrl: LoadingController,
     private cdr: ChangeDetectorRef
   ){}
-    
-
-  getCurrentUser() {
-    const auth = getAuth();
-      onAuthStateChanged(auth, (user) => {
-        if (user) {
-          // User is signed in, see docs for a list of available properties
-          // https://firebase.google.com/docs/reference/js/auth.user
-          this.currentUser = user.uid;
-          // ...
-        } else {
-          // User is signed out
-          // ...
-        }
-      });
-  }
+   
  async ngOnInit() {  
 
     this.getUserPreferences();
@@ -108,7 +93,7 @@ export class UsersPage implements OnInit {
       
       this.firebaseService.setStorage(STORAGE.USER, user);
       if(!user.profile_picture) {
-        // this.showAlert("Incomplete profile", "Please add your profile picture before you can start swiping", "Go to profile")
+        this.showAlert("Incomplete profile", "Please add your profile picture before you can start swiping", "Go to profile")
       }
     }).catch(err => {
       console.log(err);
@@ -147,7 +132,7 @@ export class UsersPage implements OnInit {
       const filtered =  [...wantList, ...withList];
       users =[...new Set(filtered)];
       
-      this.chatService.getMySwipes().forEach(s => {
+      this.chatService.getMySwipes().forEach((s:any) => {
         const swipes = [...s.swippers, ...s.swipped];
 
         this.getUsersWithLocation(users);
@@ -189,7 +174,6 @@ export class UsersPage implements OnInit {
 
   getUserPreferences() {
     const prefs = this.firebaseService.getStorage(STORAGE.PREFERENCES);
-    console.log("No prefs", prefs);
     if(prefs && prefs.distance) {
       this.userPreferences = prefs;
       this.distanceFilter.value = prefs.distance;
@@ -225,7 +209,7 @@ export class UsersPage implements OnInit {
     this.firebaseService.setUserPreferences(this.userPreferences).then(() => {
       this.distanceFilter.value = parseInt(pref);
       this.firebaseService.setStorage(STORAGE.PREFERENCES, this.userPreferences);
-      this.usersWithDistance =  this.users.filter((u: any) => parseInt(u.location.distance) < this.distanceFilter.value);
+      this.usersWithDistance = this.users; // this.users.filter((u: any) => parseInt(u.location.distance) < this.distanceFilter.value);
       this.cdr.detectChanges();
       loading.dismiss();
      });

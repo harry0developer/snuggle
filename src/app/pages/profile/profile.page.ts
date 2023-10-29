@@ -1,15 +1,15 @@
 import { Component, OnInit } from '@angular/core';
-import { LoadingController, ModalController, Platform } from '@ionic/angular';
+import { AlertController, LoadingController, ModalController, Platform } from '@ionic/angular';
 import { SettingsModalPage } from '../settings-modal/settings-modal.page';
 import { ActionSheetController } from '@ionic/angular';
 import { Camera,  CameraResultType, CameraSource } from '@capacitor/camera';
 import { Subscription } from 'rxjs';
 import { Auth } from '@angular/fire/auth';
- 
-import moment from 'moment';
-import { FirebaseService } from '../../service/firebase.service';
 import { COLLECTION } from '../../utils/const';
+import { FirebaseService } from '../../service/firebase.service';
+import { onAuthStateChanged } from "firebase/auth";
 
+import moment from 'moment';
 
 @Component({
   selector: 'app-profile',
@@ -31,19 +31,42 @@ export class ProfilePage implements OnInit{
     private actionSheetController: ActionSheetController,
     private loadingCtrl: LoadingController,
     private auth: Auth,
+    private alertCtrl: AlertController
     ) {}
-
+ 
 
   async ngOnInit() {
     this.isLoading = true;
     this.currentUser = this.auth.currentUser;
+
+    // onAuthStateChanged(this.auth, (user: any) => {
+    //   console.log("State changed ", user);
+    //   if(!user.emailVerified && user.email) {
+    //     this.showAlert("Account not verified", "Please verify your account by following a link sent to your email address", "Resend verification link")
+    //   }
+      
+    // })
+    
     await this.firebaseService.getCurrentUser().then((user: any) => {      
       this.user = user;
       this.isLoading = false;
+      
+      // this.showAlert("Account not verified", "Please verify your account by following a link send to your email address", "Check verification");
     }).catch(err => {
       console.log(err);
       this.isLoading = false;
     }); 
+  }
+
+  async showAlert(header: string, message: string, btnText: string) {
+    const alert = await this.alertCtrl.create({
+      header, message, buttons: [btnText], 
+       backdropDismiss: false
+    });
+    await alert.present();
+    // alert.onDidDismiss().then(() => {
+    //   this.router.navigateByUrl(ROUTES.PROFILE, {replaceUrl:true})
+    // });
   }
 
   async openSettingsModal() {

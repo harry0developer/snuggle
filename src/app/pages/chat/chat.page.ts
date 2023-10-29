@@ -42,7 +42,7 @@ export class ChatPage implements OnInit {
       this.chatService.documentExist$.subscribe(status => {
         this.chatsDocumentId = status;
         this.chatService.getOurMessages(status).then(msgs => {
-            msgs.forEach(m => {
+            msgs.forEach((m: any) => {
               if(m && m.messages) {
                 this.messagesArray = m.messages;
                 console.log(m.messages);
@@ -60,7 +60,7 @@ export class ChatPage implements OnInit {
       msg: this.newMsg,
       from: this.auth.currentUser.uid,
       to: this.reciever.uid,
-      createdAt: new Date().getMilliseconds//this.chatService.getServerTimestamp()
+      createdAt: this.chatService.getServerTimestamp()
     } 
     console.log(newMessage);
     const newMessages: MessageObj = {

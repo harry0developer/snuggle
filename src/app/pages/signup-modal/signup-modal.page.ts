@@ -4,7 +4,8 @@ import { Router } from '@angular/router';
 import { ActionSheetController, AlertController, LoadingController, ModalController } from '@ionic/angular';
 import { User } from 'src/app/models/models';
 import { FirebaseService } from 'src/app/service/firebase.service';
-import { COLLECTION, ROUTES, STORAGE } from 'src/app/utils/const';
+import { COLLECTION, LOGIN_TYPE, ROUTES, STORAGE } from 'src/app/utils/const';
+
 import moment from 'moment';
 
 @Component({
@@ -57,7 +58,7 @@ export class SignupModalPage implements OnInit {
     private alertCtrl: AlertController,
     private modalCtrl: ModalController,
     public actionSheetController: ActionSheetController,
-    private loadingCtrl:LoadingController,
+    private loadingCtrl:LoadingController
   ) { } 
 
   get email() {
@@ -138,49 +139,45 @@ export class SignupModalPage implements OnInit {
     this.maxDate = m.format();
     this.selectedDate = m.format();    
   }
- 
-	async createAccount(otp: string) { 
-    if(otp !== this.code) { 
-      this.showAlert("Account Verification", "Verification code does not match");
-    } else {
-      this.user  = { 
-        uid: "",
-        email: this.email,
-        name: this.firebaseService.capitalize(this.name),
-        gender: this.gender,
-        want: this.want,
-        with: this.with,
-        dob: this.dob,
-        verificationCode: otp,
-        profile_picture: "",
-        images: [],
-        password: this.password,
-        isVerified: false,
-        location: {
-          distance: "",
-          geo: {
-            lat: 0,
-            lng: 0
-          }
-        }
-      }; 
-      this.createAccountHelper();      
-    }
-      
-	} 
 
-  async createAccountHelper() {
+  async createAccount() {
+    this.user = { 
+      uid: "",
+      email: this.email,
+      name: this.firebaseService.capitalize(this.name),
+      gender: this.gender,
+      want: this.want,
+      with: this.with,
+      dob: this.dob,
+      loginType: LOGIN_TYPE.EMAIL,
+      profile_picture: "",
+      images: [],
+      password: this.password,
+      isVerified: false,
+      location: {
+        distance: "",
+        geo: {
+          lat: 0,
+          lng: 0
+        }
+      }
+    }; 
+
     const loading = await this.loadingCtrl.create({message: "Creating account, please wait..."});
     await loading.present();
+
     console.log(this.user);
     const location = this.firebaseService.getStorage(STORAGE.LOCATION);
-    const user = await this.firebaseService.register(this.email, this.password);
+    const user = await this.firebaseService.createAccountWithEmailAndPassword(this.email, this.password);
     if(!!user && user.user.uid) {
       this.user.uid = user.user.uid;
       this.user.location.geo.lat = location.lat;
       this.user.location.geo.lng = location.lng;
+      this.user.isVerified = user.user.emailVerified;
       this.firebaseService.addDocumentToFirebaseWithCustomID(COLLECTION.USERS, this.user).then(res => {
         loading.dismiss();
+        this.firebaseService.sendEmailVerification();
+        this.firebaseService.setStorage(STORAGE.USER, this.user);
         this.modalCtrl.dismiss().then(() => this.router.navigateByUrl(ROUTES.USERS, {replaceUrl:true}));
       }).catch(err => {
         console.log(err);
@@ -218,15 +215,8 @@ export class SignupModalPage implements OnInit {
   }
 
   cancel() {
-    // this.router.navigateByUrl(ROUTES.SIGNIN, {replaceUrl: true})
     this.modalCtrl.dismiss();
-  }  
-
-  sendVerificationCode() {
-    this.next();
-    this.code = ""+Math.floor(Math.random()*1000000+1);
-    console.log("Cocde: ", this.code);
-  }
+  }   
 
   resedCode() {
     this.code = ""+Math.floor(Math.random()*100000+1);
@@ -253,12 +243,6 @@ export class SignupModalPage implements OnInit {
         return 0;
       }
     }
-  }
-  
-  async verifyLoginCode(form: NgForm) {
-    const frm = form.value;
-    const otp = [...frm.otp1, ...frm.otp2, ...frm.otp3, ...frm.otp4, ...frm.otp5, ...frm.otp6].join('');
-   this.createAccount(otp);
   }
 
 }

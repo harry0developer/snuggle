@@ -16,7 +16,7 @@ import Methods from 'src/app/utils/helper/funtions';
 })
 export class ChatsPage implements OnInit {
 
-  defaultImage = '../../../assets/default/default.jpg';
+  defaultImage = '../../../assets/default.jpg';
 
   currentUser: any;
   isLoading: boolean = true;
@@ -56,8 +56,8 @@ export class ChatsPage implements OnInit {
           })
         });
 
-        s.swipped.forEach(sp => {
-          users.forEach(u => {
+        s.swipped.forEach((sp: any) => {
+          users.forEach((u: any) => {
             if(u.uid == sp.swipperUid) {
               matchList.push(u);
             }

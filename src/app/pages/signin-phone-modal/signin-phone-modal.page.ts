@@ -3,12 +3,14 @@ import { Validators, FormBuilder, FormGroup, FormControl, NgForm } from '@angula
 import { Router } from '@angular/router';
 import { ActionSheetController, AlertController, LoadingController, ModalController } from '@ionic/angular';
 import { Observable } from 'rxjs'; 
-import { CountryCodeModalModalPage } from '../country-code-modal/country-code-modal.page';
-import { SignupPhoneModalPage } from '../signup-phone-modal/signup-phone-modal.page';
-import { Country, User } from 'src/app/models/models';
+import { DataService } from 'src/app/service/data.service';
 import { FirebaseService } from 'src/app/service/firebase.service';
+import { CountryCodeModalModalPage } from '../country-code-modal/country-code-modal.page';
+import { Country, User } from 'src/app/models/models';
+import { getAuth, RecaptchaVerifier } from '@angular/fire/auth';
+import { COLLECTION, LOGIN_TYPE, ROUTES, STORAGE } from 'src/app/utils/const';
+import { SignupPhoneModalPage } from '../signup-phone-modal/signup-phone-modal.page';
 import { WindowService } from 'src/app/service/window.service';
-import { COLLECTION, ROUTES, STORAGE } from 'src/app/utils/const';
  
 @Component({
   selector: 'app-signin-phone-modal',
@@ -40,7 +42,7 @@ export class SigninPhoneModalPage implements OnInit {
 
   appVerifier: any;
 
-  user: any;
+  user: User;
 
   isLoading: boolean = false;
 
@@ -63,13 +65,13 @@ export class SigninPhoneModalPage implements OnInit {
     ]
   };
  
-   
   country: Country = {
     name: "South Africa",
     flag: "🇿🇦",
     code: "ZA",
     dialCode: "+27"
   };
+
 
   @Input() isLogin: boolean;
 
@@ -91,12 +93,12 @@ export class SigninPhoneModalPage implements OnInit {
 
   ngOnInit() {    
     this.windowRef = this.win.windowRef;
-    // this.windowRef.recaptchaVerifier = new RecaptchaVerifier( 
-    //   'recaptcha-container', {
-    //     'size': 'invisible'
-    //   },
-    //   getAuth()
-    // );
+    this.windowRef.recaptchaVerifier = new RecaptchaVerifier( 
+      getAuth(),
+      'recaptcha-container', {
+        'size': 'invisible'
+      }
+    );
     this.windowRef.recaptchaVerifier.render();
   
 
@@ -104,7 +106,7 @@ export class SigninPhoneModalPage implements OnInit {
     this.phone_number_form = this.formBuilder.group({
       phone: new FormControl('', Validators.compose([
         Validators.required,
-        Validators.minLength(11),
+        Validators.minLength(9),
       ])),
       code: new FormControl('', Validators.compose([
         Validators.required
@@ -144,12 +146,6 @@ export class SigninPhoneModalPage implements OnInit {
       loading.dismiss();
       this.user = result.user;
       this.loginWithPhoneNumber(result.user.uid); 
-      // if(this.isLogin) {
-      //   this.loginWithPhoneNumber(result.user.uid); 
-      // } else {
-      //   this.addUserIntoFirestore(result.user);
-      // }
-      
     }).catch(() => {
       loading.dismiss();
       this.showAlert("Incorrect OTP", "The verification code entered is incorrect");
@@ -196,6 +192,7 @@ export class SigninPhoneModalPage implements OnInit {
       const data: User = {
         uid: user.uid,
         phone: user.phoneNumber,
+        loginType: LOGIN_TYPE.PHONE,
         name: "",
         email: "",
         password: "",

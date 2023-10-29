@@ -12,13 +12,18 @@
 </ion-header>
 
 <ion-content> 
+
+  <ion-icon name="close-outline" class="icon"  id="rejected-icon"></ion-icon>
+  <ion-icon name="heart" class="icon" id="accepted-icon"></ion-icon>
+  
+
   <div id="parent" class="user-card-container" *ngIf="usersLoaded$ | async; else loadingTemplate">
     <ion-card class="card user-card" *ngFor="let user of usersWithDistance; let i =index"  id="{{'card-' + user.uid}}">
       <img class="swipe-img" [src]="user.profile_picture" />
       <div class="user-info">
         <h1 class="title">
           {{user.name}}, {{ getUserAge(user)}}
-          <img *ngIf="user?.isVerified" class="verified" src="../../../assets/generic/verify.png" alt="">
+          <img *ngIf="user?.isVerified" class="verified" src="../../../assets/verify.png" alt="">
         </h1>
         <p>
           <ion-icon name="location-outline"></ion-icon>
@@ -29,10 +34,10 @@
       <div class="show-more">
         <ion-icon color="primary" (click)="showUserModal(user)" name="arrow-up-circle-outline"></ion-icon>
       </div>
-        <!-- <ion-icon name="heart-dislike" class="icon" id="rejected-icon"></ion-icon> -->
-        <ion-icon name="close-outline" class="icon"  id="rejected-icon"></ion-icon>
-        <ion-icon name="heart" class="icon" id="accepted-icon"></ion-icon>
+      <!-- <ion-icon name="close-outline" class="icon"  id="rejected-icon"></ion-icon>
+      <ion-icon name="heart" class="icon" id="accepted-icon"></ion-icon> -->
     </ion-card>
+
 
     <div class="no-swipes" *ngIf="usersWithDistance.length < 1">
       <h1>You ran out of people</h1>

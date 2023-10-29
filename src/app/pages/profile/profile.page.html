@@ -16,7 +16,7 @@
   <div class="container" *ngIf="!isLoading; else emptyTemplate">
     <div class="top">
       <div class="user-avatar">
-        <img *ngIf="user && !user.profile_picture" src="../../../assets/default/default.jpg" alt="">
+        <img *ngIf="user && !user.profile_picture" src="../../../assets/default.jpg" alt="">
         <img *ngIf="user && user.profile_picture" [src]="user.profile_picture" alt="">
       </div>
       <div class="user-info">

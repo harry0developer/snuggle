@@ -3,6 +3,7 @@ import { LoadingController, ModalController, Platform } from '@ionic/angular';
 import { LocationService } from './service/location.service';
 import { FirebaseService } from './service/firebase.service';
 import { SplashScreen } from '@capacitor/splash-screen';
+ 
 
 @Component({
   selector: 'app-root',
@@ -11,16 +12,11 @@ import { SplashScreen } from '@capacitor/splash-screen';
 })
 export class AppComponent{
   location: any;
-  constructor(
 
-    private platform: Platform) {
-
-      this.platform.ready().then(() => {
-         
-      })
-       
+  constructor( private platform: Platform) {
+    this.platform.ready().then(() => { })
   }
- 
+  
   async showSplashscreen() {
     await SplashScreen.hide();
     

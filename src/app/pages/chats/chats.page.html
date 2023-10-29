@@ -12,9 +12,8 @@
       <div *ngFor="let user of matches" class="item">
         <ion-avatar (click)="openChats(user)">
           <img [alt]="user?.name" [src]="user?.profile_picture ? user.profile_picture : defaultImage" />
-
-          <!-- <img [alt]="user?.name" [src]="user?.profile_picture ? user.profile_picture : defaultImage" /> -->
         </ion-avatar> 
+        
         <p (click)="openChats(user)">{{user.name  ? (user.name  | titlecase) : "Unknown"}}</p>
        </div> 
     </ul>

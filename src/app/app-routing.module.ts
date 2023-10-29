@@ -15,6 +15,10 @@ const routes: Routes = [
     loadChildren: () => import('./pages/auth/auth.module').then( m => m.AuthPageModule),
   },
   {
+    path: 're-auth',
+    loadChildren: () => import('./pages/re-auth/re-auth.module').then( m => m.ReAuthPageModule),
+  },
+  {
     path: 'intro',
     loadChildren: () => import('./pages/intro/intro.module').then( m => m.IntroPageModule),
     ...canActivate(redirectLoggedInHome)

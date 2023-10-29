@@ -108,11 +108,9 @@ export class SettingsModalPage implements OnInit {
 
   async logout() {
     await this.firebaseService.signout().then(() => {
-      this.cancel();
-      this.firebaseService.removeStorageItem(STORAGE.USER);
-      this.firebaseService.removeStorageItem(STORAGE.USERS);
-      this.firebaseService.removeStorageItem(STORAGE.SWIPES);
-      this.router.navigateByUrl(ROUTES.AUTH, {replaceUrl:true})
+      this.cancel().then(() => {
+        this.router.navigateByUrl(ROUTES.REAUTH, {replaceUrl:true})
+      })
     })
   }
 }

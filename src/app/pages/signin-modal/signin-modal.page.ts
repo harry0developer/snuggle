@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { Validators, FormBuilder, FormGroup, FormControl } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ActionSheetController, AlertController, LoadingController, ModalController, ToastController } from '@ionic/angular';
@@ -16,6 +16,8 @@ export class SigninModalPage implements OnInit {
   signin_form: FormGroup;
   errorMessage: string = '';
   activeStep: number = 0;
+
+  @Input() emailAddress: string;
 
   validation_messages = {
     'email': [
@@ -62,6 +64,14 @@ export class SigninModalPage implements OnInit {
     });
   }
   
+  ngAfterViewInit() {
+    // this.gGroup.controls[this.groupControl].setValue()
+    console.log("Email address ", this.emailAddress);
+    
+    if(this.emailAddress) {
+      this.validations_form.controls['email'].setValue(this.emailAddress)
+    }
+  }
   async signin() {
     const loading = await this.loadingCtrl.create( {message:"Signing in, please wait..."});
     await loading.present();
@@ -72,7 +82,7 @@ export class SigninModalPage implements OnInit {
 
     if(status ===  STATUS.SUCCESS) {
       this.modalCtrl.dismiss();
-      this.router.navigateByUrl(ROUTES.USERS, {replaceUrl: true})
+      this.router.navigateByUrl(ROUTES.PROFILE, {replaceUrl: true})
     } else {
       if(this.firebaseService.findInString(status.message, FIREBASE_ERROR.SIGNIN_INCORRECT_PASSWORD.key)){
         this.showAlert("Login failed",  FIREBASE_ERROR.SIGNIN_INCORRECT_PASSWORD.value);

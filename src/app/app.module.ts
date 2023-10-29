@@ -25,17 +25,17 @@ import { provideStorage, getStorage } from '@angular/fire/storage';
 import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
 import { environment } from '../environments/environment';
 import { LocationService } from './service/location.service';
-import { ChatService } from './service/chat.service';
 import { WindowService } from './service/window.service';
 import { FirebaseService } from './service/firebase.service';
+import { ChatService } from './service/chat.service';
 
 
 @NgModule({
   declarations: [AppComponent],
   imports: [
     IonicModule.forRoot(),
-    BrowserModule, 
     FormsModule,
+    BrowserModule, 
     ReactiveFormsModule,
     HttpClientModule,
     AppRoutingModule,
@@ -50,7 +50,6 @@ import { FirebaseService } from './service/firebase.service';
     provideAuth(() => getAuth()),
     provideFirestore(() => getFirestore()),
     provideStorage(() => getStorage())
-
   ],
   providers: [
     FirebaseService,

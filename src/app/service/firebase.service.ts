@@ -3,7 +3,9 @@ import { Router } from '@angular/router';
 import { 
   Auth, createUserWithEmailAndPassword,
   signInWithEmailAndPassword, signOut,
-  signInWithPhoneNumber, ApplicationVerifier, sendPasswordResetEmail
+  signInWithPhoneNumber, ApplicationVerifier, sendPasswordResetEmail,
+  sendEmailVerification,
+  getAuth, deleteUser
 } from '@angular/fire/auth';
 import { doc,setDoc,Firestore, getDoc, collection, collectionData, query, where, CollectionReference } from '@angular/fire/firestore';
 import { ref, Storage, UploadResult, uploadString, getStorage, getDownloadURL, StorageReference, listAll, ListResult, deleteObject } from '@angular/fire/storage';
@@ -15,7 +17,7 @@ import { MatchPage } from '../pages/match/match.page';
 import { Chat, Swipe, User, Preferences } from '../models/models';
 
 import {Photo } from '@capacitor/camera';
-import { STATUS, STORAGE, COLLECTION, SWIPE_USER } from '../utils/const';
+import { STATUS, STORAGE, COLLECTION, SWIPE_USER, LOGIN_TYPE } from '../utils/const';
 
 @Injectable({
   providedIn: 'root',
@@ -41,9 +43,14 @@ export class FirebaseService {
     return JSON.parse(localStorage.getItem(key) || '{}');
   }
   
+
+  //new 
+  async sendEmailVerification() {
+    return await sendEmailVerification(this.auth.currentUser);
+  }
  
   //new
-  async register(email: string, password: string)  {
+  async createAccountWithEmailAndPassword(email: string, password: string)  {
     try {
       const user = await createUserWithEmailAndPassword(this.auth, email, password)
       return user;
@@ -51,6 +58,15 @@ export class FirebaseService {
         return null;
     }
   } 
+
+  //new 
+  async deleteCurrentUser() {
+    return deleteUser(this.auth.currentUser);
+  }
+
+  async createTempUserWithEmail(email: string, password: string)  {
+    return await createUserWithEmailAndPassword(this.auth, email, password);
+  }
 
   //new
   async login(email: string, password: string) {
@@ -93,7 +109,6 @@ export class FirebaseService {
     return this.addDocumentToFirebaseWithCustomID(COLLECTION.PREFERENCES, preferences);
   }
 
- 
 
   removeStorageItem(key: string) {
     localStorage.removeItem(key);
@@ -158,22 +173,12 @@ export class FirebaseService {
       console.log("No such document!");
       return null
     }
+    
   }
 
 
   async getCurrentUser() {
-
     return this.getDocumentFromFirebase(COLLECTION.USERS, this.auth.currentUser.uid);
-    // const docRef = doc(this.firestore, COLLECTION.USERS)
-    // const docSnap = await getDoc(docRef);
-    
-    // if (docSnap.exists()) {
-    //   return docSnap.data();
-    // } else {
-    //   // doc.data() will be undefined in this case
-    //   console.log("No such document!");
-    //   return null
-    // }
   }
  
 
@@ -198,9 +203,6 @@ export class FirebaseService {
     });
   }
  
-
- 
-
   async getAllUsers(){
     return this.afs.collection<User>(COLLECTION.USERS).get();
   }
@@ -316,9 +318,7 @@ export class FirebaseService {
     })
   }
 
-  private async showMatchModal(user: any){
-    console.log("match user", user);
-    
+  private async showMatchModal(user: any){    
     const modal = await this.modalCtrl.create({
       component: MatchPage,
       componentProps: { 
@@ -338,9 +338,7 @@ export class FirebaseService {
   }
   
 
-  private async removeDocumentFromFirebase(col: string, docId: string) {
-    console.log("Removing users", docId);
-    
+  private async removeDocumentFromFirebase(col: string, docId: string) {    
     return await this.afs.collection(col).doc(docId).delete();
   } 
 
@@ -351,7 +349,6 @@ export class FirebaseService {
   }
 
   async getDocumentFromFirebase(collection: string, uid: string){
- 
     const docRef = doc(this.firestore, collection, uid);
     const docSnap = await getDoc(docRef);
     
@@ -362,12 +359,10 @@ export class FirebaseService {
       console.log("No such document!");
       return null
     }
-    
   }
 
   async addDocumentToFirebaseWithCustomID(collection: string, data: any) {
-    const docRef = doc(this.firestore, collection);
-    await setDoc(docRef, data, {merge: true});
+    return await this.afs.collection(collection).doc(data.uid).set(data);
   }
 
   async createAccountWithMobile(collection: string, user: any) {
@@ -381,6 +376,7 @@ export class FirebaseService {
       with: [],
       dob: "",
       phone: user.phoneNumber,
+      loginType: LOGIN_TYPE.PHONE,
       images: [],
       profile_picture: "",
       isVerified: true, 

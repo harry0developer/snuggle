@@ -22,7 +22,7 @@ export class MatchPage implements OnInit{
   @Input() user: User;
   me: User;
   options: AnimationOptions = {    
-    path: '/assets/animations/fireworks.json'  
+    path: '/assets/fireworks.json'  
   };  
   
   constructor(

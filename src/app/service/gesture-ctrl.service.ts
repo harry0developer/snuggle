@@ -25,7 +25,7 @@ export class GestureCtrlService {
 
   getUsersWithLocation(lat: number, lng: number): Observable<User[]> {
     return this.chatService.getUsers().pipe(
-      map(res => {
+      map((res: User[]) => {
         this.locationService.applyHaversine(res, lat, lng);
         console.log(res);
         return res;

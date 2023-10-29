@@ -30,7 +30,7 @@ export interface User {
     isVerified: boolean;
     dateCreated?: string;
     compensation?: string;
-    verificationCode?: string;
+    loginType: string;
     lastMsg?: Message;
     location: {
         distance: string;
