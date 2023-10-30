@@ -13,6 +13,8 @@
 </ion-header>
 
 <ion-content [fullscreen]="true"> 
+
+
   <div class="container" *ngIf="!isLoading; else emptyTemplate">
     <div class="top">
       <div class="user-avatar">
@@ -23,7 +25,6 @@
         <h1>{{user?.name}}, {{getUserAge()}}</h1>
         <ion-badge *ngIf="!user?.isVerified" class="badge unverified">Unverified</ion-badge>
         <ion-badge *ngIf="user?.isVerified" class="badge verified">verified</ion-badge>
-
       </div>
     </div>
     <div class="bottom">
@@ -85,6 +86,7 @@
       <h1>Loading Profile...</h1>
       <p>This should not take long. Hang on tight...</p>
     </div>
-  </ng-template>
- 
+  </ng-template> 
+
+
 </ion-content>

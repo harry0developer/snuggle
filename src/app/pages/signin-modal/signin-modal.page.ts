@@ -2,8 +2,9 @@ import { Component, Input, OnInit } from '@angular/core';
 import { Validators, FormBuilder, FormGroup, FormControl } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ActionSheetController, AlertController, LoadingController, ModalController, ToastController } from '@ionic/angular';
+import { User } from 'src/app/models/models';
 import { FirebaseService } from 'src/app/service/firebase.service';
-import { FIREBASE_ERROR, ROUTES, STATUS } from 'src/app/utils/const';
+import { FIREBASE_ERROR, LOGIN_TYPE, ROUTES, STATUS, STORAGE } from 'src/app/utils/const';
 
 @Component({
   selector: 'app-signin-modal',
@@ -16,9 +17,7 @@ export class SigninModalPage implements OnInit {
   signin_form: FormGroup;
   errorMessage: string = '';
   activeStep: number = 0;
-
-  @Input() emailAddress: string;
-
+  user: User;
   validation_messages = {
     'email': [
      { type: 'required', message: 'Email is required.' },
@@ -52,6 +51,7 @@ export class SigninModalPage implements OnInit {
   }
  
   ngOnInit() {    
+    this.user = this.firebaseService.getStorage(STORAGE.USER);
     this.validations_form = this.formBuilder.group({
       email: new FormControl('', Validators.compose([
         Validators.required,
@@ -64,12 +64,9 @@ export class SigninModalPage implements OnInit {
     });
   }
   
-  ngAfterViewInit() {
-    // this.gGroup.controls[this.groupControl].setValue()
-    console.log("Email address ", this.emailAddress);
-    
-    if(this.emailAddress) {
-      this.validations_form.controls['email'].setValue(this.emailAddress)
+  ngAfterViewInit() {    
+    if(this.user.loginType == LOGIN_TYPE.EMAIL) {
+      this.validations_form.controls['email'].setValue(this.user.email);
     }
   }
   async signin() {
@@ -82,7 +79,7 @@ export class SigninModalPage implements OnInit {
 
     if(status ===  STATUS.SUCCESS) {
       this.modalCtrl.dismiss();
-      this.router.navigateByUrl(ROUTES.PROFILE, {replaceUrl: true})
+      this.router.navigateByUrl(ROUTES.USERS, {replaceUrl: true})
     } else {
       if(this.firebaseService.findInString(status.message, FIREBASE_ERROR.SIGNIN_INCORRECT_PASSWORD.key)){
         this.showAlert("Login failed",  FIREBASE_ERROR.SIGNIN_INCORRECT_PASSWORD.value);

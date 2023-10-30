@@ -28,7 +28,7 @@ import { LocationService } from './service/location.service';
 import { WindowService } from './service/window.service';
 import { FirebaseService } from './service/firebase.service';
 import { ChatService } from './service/chat.service';
-
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
   declarations: [AppComponent],
@@ -44,12 +44,14 @@ import { ChatService } from './service/chat.service';
     AngularFirestoreModule,
     AngularFireStorageModule,
     AngularFireDatabaseModule, 
-
    //this was working but cannot get list of documents in a collection 
     provideFirebaseApp(() => initializeApp(environment.firebaseConfig)),
     provideAuth(() => getAuth()),
     provideFirestore(() => getFirestore()),
-    provideStorage(() => getStorage())
+    provideStorage(() => getStorage()),
+    BrowserAnimationsModule
+
+
   ],
   providers: [
     FirebaseService,

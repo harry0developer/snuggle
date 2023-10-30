@@ -16,7 +16,7 @@
   } 
 
   .bottom { 
-    height: 50vh;
+    height: 55vh;
     line-height: 1;
     color: #fff;
     .padding {
@@ -35,11 +35,20 @@
       padding: 0 0 20px 0;
     }
     ion-button {
-      height: 50px;
-      --background: #fff;
-      --color:#762b69;
+      // height: 40px;
       font-weight: bold;
     }
+    ion-button.create-account { 
+      --background: #fff;
+      --color:#762b69;
+    }
+    
+    ion-button.login { 
+      border: 2px solid #fff;
+      --color:#FFF;
+      border-radius: 40px;
+    }
+
     .terms-conditions {
       color: #ab4699;
       margin: 20px 40px;

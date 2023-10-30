@@ -136,3 +136,24 @@
       font-size: 20px;
     }
   }
+
+
+.ng-image-fullscreen-view .lightbox-wrapper .lightbox-div .next {
+    display: none;
+}
+
+::ng-deep {
+    .lightbox-wrapper {
+        .next.icons  {
+            display: none;
+        }
+        .prev.icons  {
+            display: none;
+        }
+        .close {
+            position: absolute;
+            // top: 65px !important;
+            // left: 84% !important;
+        }
+    }
+}

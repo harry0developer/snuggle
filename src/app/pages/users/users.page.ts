@@ -46,9 +46,12 @@ export class UsersPage implements OnInit {
     value: 50
   };
 
+  isLoading: boolean = false;
+
   userPreferences: Preferences;
 
   mySwipes: any[] = [];
+  
 
   @ViewChildren(IonCard, { read: ElementRef }) cards: QueryList<ElementRef>;
 
@@ -90,7 +93,6 @@ export class UsersPage implements OnInit {
     await this.firebaseService.getCurrentUser().then((user: any) => {
       this.currentUser = user;
       console.log("Current user ", user);
-      
       this.firebaseService.setStorage(STORAGE.USER, user);
       if(!user.profile_picture) {
         this.showAlert("Incomplete profile", "Please add your profile picture before you can start swiping", "Go to profile")
@@ -105,7 +107,7 @@ export class UsersPage implements OnInit {
     this.users = [];
     let usersEx: User[] = [];
     await this.chatService.getData(COLLECTION.USERS).forEach((users: any) => {
-      // console.log("Users", users);
+      console.log("Users", users);
       
       //I want list
       let wantList: any[] = [];
@@ -119,22 +121,29 @@ export class UsersPage implements OnInit {
 
       // With list 
       let withList: any[] = [];
-      users.forEach((u:any) => {
-        u.with.forEach((uw: any) => {
-          if(this.currentUser.with.includes(uw)) {
-            withList.push(u);
+ 
+
+      users.forEach((otherUser: User) => {
+        this.currentUser.with.forEach((myWith: string) => {
+          if(myWith == otherUser.gender) {
+            withList.push(otherUser)
           }
         })
-      });
+      })
+ 
 
       wantList = [...new Set(wantList)];
       withList = [...new Set(withList)];
       const filtered =  [...wantList, ...withList];
       users =[...new Set(filtered)];
       
+      console.log("USers with filter", users);
+      
+      //Exclude the ones I Swipped
       this.chatService.getMySwipes().forEach((s:any) => {
         const swipes = [...s.swippers, ...s.swipped];
 
+        //Get users location
         this.getUsersWithLocation(users);
 
         if(swipes.length < 1) {
@@ -161,8 +170,10 @@ export class UsersPage implements OnInit {
           });
 
           this.users = usersEx;
-          this.usersWithDistance = this.users.filter(u => parseInt(u.location.distance) < this.distanceFilter.value);
-          
+          // this.usersWithDistance = this.users.filter(u => parseInt(u.location.distance) < this.distanceFilter.value);
+
+          this.applyDistanceFilter();
+   
         } 
         this.usersLoaded$.next(true);
       });
@@ -201,7 +212,9 @@ export class UsersPage implements OnInit {
     });
   }
 
-  async updateUserPreference(pref: string) {    
+  async updateUserPreference(pref: string) {   
+    this.isLoading = true;
+ 
     const loading = await this.loadingCtrl.create({message: "Applying filter..."});
     await loading.present();
 
@@ -212,6 +225,10 @@ export class UsersPage implements OnInit {
       this.usersWithDistance = this.users; // this.users.filter((u: any) => parseInt(u.location.distance) < this.distanceFilter.value);
       this.cdr.detectChanges();
       loading.dismiss();
+      this.isLoading = false;
+
+     }).catch(() => {
+      this.isLoading = false;
      });
   }
   

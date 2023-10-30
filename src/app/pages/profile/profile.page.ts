@@ -1,16 +1,19 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { AlertController, LoadingController, ModalController, Platform } from '@ionic/angular';
 import { SettingsModalPage } from '../settings-modal/settings-modal.page';
 import { ActionSheetController } from '@ionic/angular';
 import { Camera,  CameraResultType, CameraSource } from '@capacitor/camera';
-import { Subscription } from 'rxjs';
 import { Auth } from '@angular/fire/auth';
 import { COLLECTION } from '../../utils/const';
+import { User } from 'src/app/models/models';
 import { FirebaseService } from '../../service/firebase.service';
 import { onAuthStateChanged } from "firebase/auth";
+import { GalleryModule, GalleryItem, ImageItem, GalleryComponent, Gallery } from 'ng-gallery';
+
+import { Lightbox } from 'ng-gallery/lightbox';
 
 import moment from 'moment';
-
+ 
 @Component({
   selector: 'app-profile',
   templateUrl: 'profile.page.html',
@@ -22,41 +25,67 @@ export class ProfilePage implements OnInit{
   images: [] ;
   profilePicture: string;
   currentUser: any;
-  isLoading: boolean = true;
-  private subs: Subscription[] = [];
+  isLoading: boolean = true; 
+  galleryId = 'myLightbox';
+
+  galImages: GalleryItem[];
+ 
   constructor(
-    // private gallery: Gallery, 
     private firebaseService: FirebaseService,
     private modalCtrl: ModalController,
     private actionSheetController: ActionSheetController,
     private loadingCtrl: LoadingController,
     private auth: Auth,
-    private alertCtrl: AlertController
-    ) {}
- 
+    private alertCtrl: AlertController,
+    public gallery: Gallery, private lightbox: Lightbox
+    ) {} 
 
   async ngOnInit() {
-    this.isLoading = true;
-    this.currentUser = this.auth.currentUser;
 
-    // onAuthStateChanged(this.auth, (user: any) => {
-    //   console.log("State changed ", user);
-    //   if(!user.emailVerified && user.email) {
-    //     this.showAlert("Account not verified", "Please verify your account by following a link sent to your email address", "Resend verification link")
-    //   }
-      
-    // })
+    this.isLoading = true;
+    this.currentUser = this.auth.currentUser; 
     
     await this.firebaseService.getCurrentUser().then((user: any) => {      
       this.user = user;
+      this.initialiseGallery(user);
       this.isLoading = false;
-      
-      // this.showAlert("Account not verified", "Please verify your account by following a link send to your email address", "Check verification");
     }).catch(err => {
       console.log(err);
       this.isLoading = false;
     }); 
+
+   
   }
+
+  initialiseGallery(user: User) {
+    this.galImages = [];
+
+    user.images.forEach((img:string) => {
+      this.galImages.push( 
+        new ImageItem({ src: img, thumb: '' } ),
+      );
+    })
+ 
+    const galleryRef = this.gallery.ref(this.galleryId);
+    galleryRef.setConfig( {
+      thumb: false,
+      nav: false
+    })
+    galleryRef.load(this.galImages);
+
+  }
+
+  
+  showImage(index: number) {
+    this.lightbox.open(index, this.galleryId, {
+      panelClass: 'fullscreen'
+    });
+  }
+
+  private viewPhoto(index: number) {
+    this.showImage(index);
+  }
+
 
   async showAlert(header: string, message: string, btnText: string) {
     const alert = await this.alertCtrl.create({
@@ -146,10 +175,6 @@ export class ProfilePage implements OnInit{
       loading.dismiss()
     })
     
-  }
-
-  private viewPhoto(index: number) {
-    this.showGallery(index)
   }
 
   private async deletePhoto(index: number) {

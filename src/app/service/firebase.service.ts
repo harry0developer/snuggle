@@ -74,6 +74,8 @@ export class FirebaseService {
       await signInWithEmailAndPassword(this.auth, email, password)
       return STATUS.SUCCESS;
     } catch (error) {
+      console.log(error);
+      
         return error;
     }
   } 
@@ -178,6 +180,8 @@ export class FirebaseService {
 
 
   async getCurrentUser() {
+    console.log("AUTH ", this.auth);
+    
     return this.getDocumentFromFirebase(COLLECTION.USERS, this.auth.currentUser.uid);
   }
  
@@ -349,16 +353,9 @@ export class FirebaseService {
   }
 
   async getDocumentFromFirebase(collection: string, uid: string){
-    const docRef = doc(this.firestore, collection, uid);
-    const docSnap = await getDoc(docRef);
-    
-    if (docSnap.exists()) {
-      return docSnap.data();
-    } else {
-      // doc.data() will be undefined in this case
-      console.log("No such document!");
-      return null
-    }
+    return new Promise<any>((resolve)=> {
+      this.afs.collection(collection, ref => ref.where('uid', '==', uid).limit(1)).valueChanges().subscribe(user => resolve(user[0]))
+    });
   }
 
   async addDocumentToFirebaseWithCustomID(collection: string, data: any) {

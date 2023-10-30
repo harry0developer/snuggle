@@ -25,14 +25,18 @@ export class ReAuthPage implements OnInit {
     private modalCtrl: ModalController, 
     private firebaseServcice: FirebaseService,
     private alertCtrl: AlertController,
-    private toastController: ToastController
+    private toastController: ToastController,
+    private router: Router
   ) { } 
  
   ngOnInit() {
     this.user = this.firebaseServcice.getStorage(STORAGE.USER);
-
+    console.log("Current user ", this.user);
+    
+    if(!this.user || !this.user.uid) {
+      this.router.navigateByUrl(ROUTES.AUTH);
+    } 
     onAuthStateChanged(getAuth(), (user: any) => {
-      console.log("State changed ", user);
       this.verification.emailVerified = user.emailVerified;
       this.user.isVerified = user.emailVerified;
       this.firebaseServcice.updateUserProfile(COLLECTION.USERS, this.user).then(() => {
@@ -65,9 +69,6 @@ export class ReAuthPage implements OnInit {
   private async openEmailSigninModal(email: string) {
     const modal = await this.modalCtrl.create({
       component: SigninModalPage,
-      componentProps: {
-        "emailAddress": email
-      },
       initialBreakpoint: 0.8,
       breakpoints: [0, 0.8],
       backdropBreakpoint: 0,
