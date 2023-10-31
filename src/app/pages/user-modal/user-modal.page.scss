@@ -1,39 +1,30 @@
-ion-content {
-    --ion-background-color:#f5f6f9;
+ion-slides {
+   height: 100%;
 }
 
-.user-preview {
-    margin-top: 10px;
-    height: 90vh;
-    .scroll {
-        height: 80vh;
-        overflow: scroll;
-        img {
-            width: 100%;
-            object-fit: cover;
-        }
-    }
+.user-details {
+  padding: 0 20px;
+  margin-bottom: 20px;
+  h1 {
+    font-weight: bold;
+    font-size: 26px;
+    margin-bottom: 0;
+  }
+  p {
+    margin-top: 0;
+   }
+  img {
+    width: 30px;
+  }
+}
 
-    .fixed-scroll {
-        background-color: #FFF;
-        position: relative;
-        bottom: 75px;
-        .info{
-            padding: 16px;
-            color: #000;
-            h1 {
-                font-size: 28px;
-                font-weight: bold;
-                margin: 0;
-            }
-            p {
-                margin: 0 0 10px 0;
-                font-size: 18px;
-                
-            }
-            .extra {
-                width: 100px;
-            }
-        }
-    }
+swiper-container::part(bullet-active) {
+  background-color: #FFF;
+}
+
+swiper-container::part(bullet), 
+swiper-container::part(bullet-active) {
+  width: 60px;
+  height: 2px;
+  border-radius: unset;
 }

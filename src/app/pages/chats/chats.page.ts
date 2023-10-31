@@ -26,6 +26,10 @@ export class ChatsPage implements OnInit {
   users: any[] = [];
   activeChats: any[] = [];
 
+  slideOpts = {
+    initialSlide: 1,
+    speed: 400,
+  };
   constructor(
     private router: Router, 
     private firebaseService: FirebaseService,

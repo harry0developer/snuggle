@@ -1,10 +1,8 @@
 import {
   Component, OnInit, ElementRef,  QueryList, ViewChildren, 
   ChangeDetectionStrategy, NgZone, ChangeDetectorRef } from "@angular/core";
-
 import { AlertController, IonCard, LoadingController, ModalController } from "@ionic/angular";
 import { BehaviorSubject } from 'rxjs';
-
 import { FilterPage } from "../filter/filter.page";
 import { Router } from "@angular/router";
 import { LocationPage } from "../location/location.page";
@@ -12,7 +10,6 @@ import { CameraPage } from "../camera/camera.page";
 import { UserModalPage } from "../user-modal/user-modal.page";
 import { Auth } from "@angular/fire/auth";
 import { MatchPage } from "../match/match.page";
-import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { Geo, Preferences, User } from "../../models/models";
 import { FirebaseService } from "../../service/firebase.service";
 import { GestureCtrlService } from "../../service/gesture-ctrl.service";
@@ -70,15 +67,11 @@ export class UsersPage implements OnInit {
   ){}
    
  async ngOnInit() {  
-
-    this.getUserPreferences();
-
-    //1. Get current logged in user
-    await this.setCurrentUser();
-
-    //2. Get all user
-    await this.getAllUsers();
-
+  this.getUserPreferences();
+  //1. Get current logged in user
+  await this.setCurrentUser();
+  //2. Get all user
+  await this.getAllUsers();
     //get user preferences
   
     // 3. Get location from storage
@@ -86,13 +79,11 @@ export class UsersPage implements OnInit {
     // if(!location || !location.lat || !location.lng) {
     //   this.openModal(SERVICE.LOCATION);
     // } 
-    
   }
  
   async setCurrentUser() {
     await this.firebaseService.getCurrentUser().then((user: any) => {
       this.currentUser = user;
-      console.log("Current user ", user);
       this.firebaseService.setStorage(STORAGE.USER, user);
       if(!user.profile_picture) {
         this.showAlert("Incomplete profile", "Please add your profile picture before you can start swiping", "Go to profile")
@@ -106,9 +97,7 @@ export class UsersPage implements OnInit {
     this.usersLoaded$.next(false);
     this.users = [];
     let usersEx: User[] = [];
-    await this.chatService.getData(COLLECTION.USERS).forEach((users: any) => {
-      console.log("Users", users);
-      
+    await this.chatService.getData(COLLECTION.USERS).forEach((users: any) => {      
       //I want list
       let wantList: any[] = [];
       users.forEach((u:any) => {
@@ -122,7 +111,6 @@ export class UsersPage implements OnInit {
       // With list 
       let withList: any[] = [];
  
-
       users.forEach((otherUser: User) => {
         this.currentUser.with.forEach((myWith: string) => {
           if(myWith == otherUser.gender) {
@@ -131,14 +119,10 @@ export class UsersPage implements OnInit {
         })
       })
  
-
       wantList = [...new Set(wantList)];
       withList = [...new Set(withList)];
       const filtered =  [...wantList, ...withList];
       users =[...new Set(filtered)];
-      
-      console.log("USers with filter", users);
-      
       //Exclude the ones I Swipped
       this.chatService.getMySwipes().forEach((s:any) => {
         const swipes = [...s.swippers, ...s.swipped];
@@ -171,17 +155,12 @@ export class UsersPage implements OnInit {
 
           this.users = usersEx;
           // this.usersWithDistance = this.users.filter(u => parseInt(u.location.distance) < this.distanceFilter.value);
-
           this.applyDistanceFilter();
-   
         } 
         this.usersLoaded$.next(true);
       });
-
     });
-        
   }
-
 
   getUserPreferences() {
     const prefs = this.firebaseService.getStorage(STORAGE.PREFERENCES);
@@ -199,11 +178,13 @@ export class UsersPage implements OnInit {
   async getUsersWithLocation(users: User[]) {
     const currLoc = this.firebaseService.getStorage(STORAGE.LOCATION);
     const loc = {lat: currLoc.lat, lng: currLoc.lng};
+
+    console.log("Loc users ", loc);
+    
     this.locationService.applyHaversine(users, loc.lat, loc.lng).forEach((u: any) => {
       this.users = u;
     });    
   } 
-
   
   ngAfterViewInit() {
     this.cards.changes.subscribe(r =>{
@@ -214,7 +195,6 @@ export class UsersPage implements OnInit {
 
   async updateUserPreference(pref: string) {   
     this.isLoading = true;
- 
     const loading = await this.loadingCtrl.create({message: "Applying filter..."});
     await loading.present();
 
@@ -282,7 +262,6 @@ export class UsersPage implements OnInit {
       console.log("confirmed");
     } else if(role === 'filter') {
       this.updateUserPreference(data);
-      
     }
   } 
 
@@ -297,6 +276,7 @@ export class UsersPage implements OnInit {
   }
 
   async showUserModal(user: any) {
+    
     const modal = await this.modalCtrl.create({
       component: UserModalPage,
       // initialBreakpoint: ,
@@ -304,15 +284,11 @@ export class UsersPage implements OnInit {
       componentProps: { 
         user
       }
-
     });
     modal.present();
-
     const { data, role } = await modal.onWillDismiss();
-
     if (role === 'confirm') {
       console.log("confirmed");
-      
     }
   }
 

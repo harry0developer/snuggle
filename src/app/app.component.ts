@@ -1,9 +1,13 @@
 import { Component } from '@angular/core'; 
 import { LoadingController, ModalController, Platform } from '@ionic/angular';
-import { LocationService } from './service/location.service';
 import { FirebaseService } from './service/firebase.service';
 import { SplashScreen } from '@capacitor/splash-screen';
- 
+import { Geolocation } from '@capacitor/geolocation';
+import { STORAGE } from './utils/const';
+import { LatLng } from './models/models';
+import { LocationPage } from './pages/location/location.page';
+import { error } from 'console';
+
 
 @Component({
   selector: 'app-root',
@@ -13,10 +17,56 @@ import { SplashScreen } from '@capacitor/splash-screen';
 export class AppComponent{
   location: any;
 
-  constructor( private platform: Platform) {
-    this.platform.ready().then(() => { })
+  constructor(
+    private platform: Platform, 
+    private firebaseService: FirebaseService,
+    private modalCtrl: ModalController
+    ) {
+    this.platform.ready().then(() => { 
+      this.getCurrentLocation().then((res: any) => {
+        const latLng:LatLng = {
+          lat: res.coords.latitude,
+          lng: res.coords.longitude
+        };
+        this.firebaseService.setStorage(STORAGE.LOCATION, latLng);
+      }).catch(error => {
+        console.log("Error ", error);
+        this.showGeoLocationErroModal();
+      })
+    })
   }
+
   
+  async showGeoLocationErroModal() {
+    const modal = await this.modalCtrl.create({
+      component: LocationPage,
+    });
+    modal.present();
+    const { data, role } = await modal.onWillDismiss();
+    if (role === 'retry') {
+      this.getCurrentLocation().then((res: any) => {
+        const latLng:LatLng = {
+          lat: res.coords.latitude,
+          lng: res.coords.longitude
+        };
+        this.firebaseService.setStorage(STORAGE.LOCATION, latLng);
+      }).catch(error => {
+        this.showGeoLocationErroModal();
+        console.log("Error ", error);
+        
+      })
+    }
+  }
+
+  async getCurrentLocation() {
+    const options = {
+      timeout: 6000, 
+      enableHighAccuracy: true, 
+      maximumAge: 3600
+    };
+    return await Geolocation.getCurrentPosition(options); 
+  }
+
   async showSplashscreen() {
     await SplashScreen.hide();
     

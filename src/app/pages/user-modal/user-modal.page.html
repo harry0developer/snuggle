@@ -2,29 +2,31 @@
   <ion-toolbar mode="md">
     <ion-buttons slot="secondary">
       <ion-button (click)="dismiss()">
-        Close
+        close
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
-  <ion-card class="user-preview">
-    <div class="scroll">
-      <img *ngFor="let u of user.images; let i=index" [src]="u">
-    </div>
-    <div class="fixed-scroll">
-      <div class="info">
-        <h1>{{user?.name}}, {{ getUserAge(user)}}</h1>
-        <p>
-          <ion-icon name="location-outline"></ion-icon>
-          {{user.location.distance || 0}}km away
-        </p>
+  <swiper-container #swiper [pagination]="true">
+    <swiper-slide *ngFor="let img of user.images">
+      <img [src]="img" alt="img">
+    </swiper-slide>
+  </swiper-container>
 
-        <ion-chip *ngFor="let extra of extras; let i=index"  [outline]="true">{{extra}}</ion-chip>
-
- 
-      </div>
+  <div class="user-details">
+    <h1 class="title">
+      {{user.name}}, {{ getUserAge(user)}}
+      <img *ngIf="user?.isVerified" class="verified" src="../../../assets/verify.png" alt="">
+    </h1> 
+    <p>
+      <ion-icon name="location-outline"></ion-icon>
+      {{user.location.distance ? user.location.distance + 'km away': 'Near by'}}
+    </p>
+    <div class="extras">
+      <ion-chip *ngFor="let item of extras" outline="true">{{item}}</ion-chip>
     </div>
-  </ion-card>
+  </div>
+
 </ion-content>

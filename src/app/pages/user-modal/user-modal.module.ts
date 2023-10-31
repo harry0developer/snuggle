@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
@@ -15,6 +15,8 @@ import { UserModalPage } from './user-modal.page';
     IonicModule,
     UserModalPageRoutingModule
   ],
-  declarations: [UserModalPage]
+  declarations: [UserModalPage],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA]
+
 })
 export class UserModalPageModule {}

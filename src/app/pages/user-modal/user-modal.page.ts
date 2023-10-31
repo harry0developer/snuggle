@@ -1,6 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { ModalController } from '@ionic/angular';
-// import { Gallery } from 'angular-gallery';
 import { User } from 'src/app/models/models';
 import Methods from 'src/app/utils/helper/funtions';
 
@@ -14,28 +13,22 @@ export class UserModalPage implements OnInit {
   user: User;
   extras: string[] = [];
  
+  @ViewChild("swiper") swipperContainer: any;
+
   constructor(
-    // private gallery: Gallery, 
     private modalCtrl: ModalController) { }
+
+
+  ngAfterViewInit() {
+    console.log("Swipe ", this.swipperContainer);
+    this.swipperContainer
+  }
 
   ngOnInit() {
     this.extras = [...this.user.want,...this.user.with]
   }
-
-  showGallery(index: number) {
-    let imgs = [];
-    for(let img of this.user.images ) {
-      imgs.push({path: img})
-    }
-    let prop = {
-        images: imgs,
-        index,
-        counter: true,
-        arrows: false
-    };
-    // this.gallery.load(prop);
-  }
-
+ 
+  
   dismiss() {
     return this.modalCtrl.dismiss();
   }
@@ -43,5 +36,9 @@ export class UserModalPage implements OnInit {
   
   getUserAge(user: User){
     return Methods.getUserAge(user);
+  }
+
+  getCurrentActiveIndex() {
+
   }
 }

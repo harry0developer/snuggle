@@ -29,6 +29,8 @@ import { WindowService } from './service/window.service';
 import { FirebaseService } from './service/firebase.service';
 import { ChatService } from './service/chat.service';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { register } from 'swiper/element/bundle';
+register();
 
 @NgModule({
   declarations: [AppComponent],

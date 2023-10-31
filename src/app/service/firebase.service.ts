@@ -74,9 +74,7 @@ export class FirebaseService {
       await signInWithEmailAndPassword(this.auth, email, password)
       return STATUS.SUCCESS;
     } catch (error) {
-      console.log(error);
-      
-        return error;
+      return error;
     }
   } 
 
@@ -84,7 +82,7 @@ export class FirebaseService {
     try {
       return await signInWithPhoneNumber(this.auth, phone, verifier)
     } catch (error) {
-        return error;
+      return error;
     }
   }
 
@@ -92,7 +90,7 @@ export class FirebaseService {
     try {
       return await sendPasswordResetEmail(this.auth, phone);
     } catch (error) {
-        return error;
+      return error;
     }
   }
 
@@ -111,11 +109,9 @@ export class FirebaseService {
     return this.addDocumentToFirebaseWithCustomID(COLLECTION.PREFERENCES, preferences);
   }
 
-
   removeStorageItem(key: string) {
     localStorage.removeItem(key);
   }
-
 
   async updateUserProfilePicture(user: User) {
     return await this.addDocumentToFirebaseWithCustomID(COLLECTION.USERS, user);
@@ -124,7 +120,6 @@ export class FirebaseService {
   async updateUserPhotoList(user: User, img: string) {
     console.log("User before", user);
     const deleted = user.images.splice(user.images.indexOf(img),1);
-    console.log("Deleted after", deleted);
     return await this.addDocumentToFirebaseWithCustomID(COLLECTION.USERS, user);
   }
 
@@ -179,9 +174,7 @@ export class FirebaseService {
   }
 
 
-  async getCurrentUser() {
-    console.log("AUTH ", this.auth);
-    
+  async getCurrentUser() {    
     return this.getDocumentFromFirebase(COLLECTION.USERS, this.auth.currentUser.uid);
   }
  
