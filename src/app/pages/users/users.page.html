@@ -26,9 +26,13 @@
           <img *ngIf="user?.isVerified" class="verified" src="../../../assets/verify.png" alt="">
         </h1>
         <p>
-          <ion-icon name="location-outline"></ion-icon>
-          {{user.location.distance ? user.location.distance + 'km away': 'Near by'}}
-        </p>
+          <ion-icon name="locate"></ion-icon>
+          {{user?.location?.address}}
+        </p> 
+        <p>
+          <ion-icon name="location"></ion-icon>
+           {{user.location.distance ? user.location.distance + 'km away': 'Near by'}}
+        </p> 
       </div>
 
       <div class="show-more">

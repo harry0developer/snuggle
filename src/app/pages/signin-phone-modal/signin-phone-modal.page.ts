@@ -206,8 +206,8 @@ export class SigninPhoneModalPage implements OnInit {
         location: {
             distance: "",
             geo: {
-              lat: 0,
-              lng: 0
+              latitude: 0,
+              longitude: 0
             }
         }
       }; 

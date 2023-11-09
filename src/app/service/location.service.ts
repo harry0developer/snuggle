@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs'; 
-import { LatLng, User } from '../models/models';
+import { Geo, User } from '../models/models';
 //export ANDROID_HOME=$HOME/Android/Sdk
 //ionic cap run android -l --external
 
@@ -28,17 +28,17 @@ export class LocationService {
     // return await Geolocation.checkPermissions();
   }
 
-  applyHaversine(users: User[], lat: number, lng:number): Observable<User[]>{
+  applyHaversine(users: User[], latitude: number, longitude:number): Observable<User[]>{
     
-    if (users && lat && lng) {
+    if (users && latitude && longitude) {
       let usersLocation = {
-        lat: lat,
-        lng: lng
+        latitude,
+        longitude
       };
       users.map(user => {
         let placeLocation = {
-          lat: user.location.geo.lat,
-          lng: user.location.geo.lng
+          latitude: user.location.geo.latitude,
+          longitude: user.location.geo.longitude
         };
         user.location.distance = this.getDistanceBetweenPoints(
           usersLocation,
@@ -51,17 +51,17 @@ export class LocationService {
     }
   }
 
-  private getDistanceBetweenPoints(start: LatLng, end: LatLng,) {
+  private getDistanceBetweenPoints(start: Geo, end: Geo,) {
     let earthRadius = {
       miles: 3958.8,
       km: 6371
     };
 
     let R = earthRadius['miles'];
-    let lat1 = start.lat;
-    let lon1 = start.lng;
-    let lat2 = end.lat;
-    let lon2 = end.lng;
+    let lat1 = start.latitude;
+    let lon1 = start.longitude;
+    let lat2 = end.latitude;
+    let lon2 = end.longitude;
 
     let dLat = this.toRad((lat2 - lat1));
     let dLon = this.toRad((lon2 - lon1));

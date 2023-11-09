@@ -10,12 +10,13 @@ import { CameraPage } from "../camera/camera.page";
 import { UserModalPage } from "../user-modal/user-modal.page";
 import { Auth } from "@angular/fire/auth";
 import { MatchPage } from "../match/match.page";
-import { Geo, Preferences, User } from "../../models/models";
+import { Geo, Location, Preferences, User } from "../../models/models";
 import { FirebaseService } from "../../service/firebase.service";
 import { GestureCtrlService } from "../../service/gesture-ctrl.service";
 import { ChatService } from "../../service/chat.service";
 import { LocationService } from "../../service/location.service";
 import { STORAGE, COLLECTION, MODALS, ROUTES } from "../../utils/const";
+import { Address, NativeGeocoder, ReverseOptions } from '@capgo/nativegeocoder';
 
 import moment from 'moment';
 
@@ -30,7 +31,6 @@ export class UsersPage implements OnInit {
   users$: any;
   currentUser: any;
   defaultImage = '../../../assets/default.jpg';
-  location: Geo;
   allUsers: User[] = [];
   users: User[] = [];
   usersWithDistance: User[] = [];
@@ -42,6 +42,8 @@ export class UsersPage implements OnInit {
     max: 120,
     value: 50
   };
+  location: any;
+  geo: Geo;
 
   isLoading: boolean = false;
 
@@ -49,7 +51,6 @@ export class UsersPage implements OnInit {
 
   mySwipes: any[] = [];
   
-
   @ViewChildren(IonCard, { read: ElementRef }) cards: QueryList<ElementRef>;
 
   constructor(
@@ -66,23 +67,30 @@ export class UsersPage implements OnInit {
     private cdr: ChangeDetectorRef
   ){}
    
- async ngOnInit() {  
-  this.getUserPreferences();
-  //1. Get current logged in user
-  await this.setCurrentUser();
-  //2. Get all user
-  await this.getAllUsers();
-    //get user preferences
   
-    // 3. Get location from storage
-    // const location = this.firebaseService.getStorage(STORAGE.LOCATION);
-    // if(!location || !location.lat || !location.lng) {
-    //   this.openModal(SERVICE.LOCATION);
-    // } 
+  ngAfterViewInit() {
+    this.cards.changes.subscribe(r =>{
+      const cardArray = this.cards.toArray();      
+      this.gestureCtrlService.useSwiperGesture(cardArray); 
+    });
+  }
+
+ async ngOnInit() {  
+    this.getUserPreferences();
+    //1. Get current logged in user
+    await this.setCurrentUser();
+    //2. Get all user
+    await this.getAllUsers();
   }
  
   async setCurrentUser() {
-    await this.firebaseService.getCurrentUser().then((user: any) => {
+    this.geo = this.firebaseService.getStorage(STORAGE.GEO);
+    await this.firebaseService.getCurrentUser().then((user: User) => {
+      if(!user.location.address) {
+        user.location.geo.latitude = this.geo.latitude;
+        user.location.geo.longitude = this.geo.longitude;
+        this.updateUserLocation(user);
+      }  
       this.currentUser = user;
       this.firebaseService.setStorage(STORAGE.USER, user);
       if(!user.profile_picture) {
@@ -92,6 +100,8 @@ export class UsersPage implements OnInit {
       console.log(err);
     });
   }
+ 
+
 
   async getAllUsers() {
     this.usersLoaded$.next(false);
@@ -162,6 +172,55 @@ export class UsersPage implements OnInit {
     });
   }
 
+  async getUsersWithLocation(users: User[]) {
+    this.locationService.applyHaversine(users, this.geo.latitude, this.geo.longitude).forEach((u: any) => {
+      this.users = [];
+      u.forEach((user: User) => {
+        this.updateUserLocation(user);
+      });
+    });    
+  } 
+  
+  private async updateUserLocation(user: User) {
+
+    if(!user.location.address) {
+      const latLng: ReverseOptions = {
+        latitude: user.location.geo.latitude,
+        longitude: user.location.geo.longitude, 
+        apiKey: 'AIzaSyD2w1H2MKOBgl-C6Bb1EwwY19mK5cdIy-w',
+        maxResults: 1
+      }    
+      await NativeGeocoder.reverseGeocode(latLng).then(res => {
+        user.location.address = res.addresses[0]?.locality;
+        // console.log('User with address',user.uid, "Add ", res.addresses[0]?.locality );        
+        this.users.push(user);
+      });
+    } else {
+      this.users.push(user);
+    }
+  }
+
+  async getAddressFromCoordinates(user: User, latitude: number, longitude: number) {
+    const latLng: ReverseOptions = {
+      latitude,
+      longitude, 
+      apiKey: 'AIzaSyD2w1H2MKOBgl-C6Bb1EwwY19mK5cdIy-w',
+      maxResults: 1
+    }
+    await NativeGeocoder.reverseGeocode(latLng).then(res => {
+      console.log("Location res", res.addresses[0]);
+      const loc: Address = res.addresses[0];
+      user.location.address = loc.locality;
+      user.location.geo = {latitude: loc.latitude, longitude: loc.longitude};
+      this.firebaseService.updateUserProfile(user);
+      // this.firebaseService.setStorage(STORAGE.LOCATION, res.addresses[0]);
+    }).catch(err => {
+      console.log("Error ", err);
+    })
+  }
+
+ 
+  
   getUserPreferences() {
     const prefs = this.firebaseService.getStorage(STORAGE.PREFERENCES);
     if(prefs && prefs.distance) {
@@ -173,24 +232,6 @@ export class UsersPage implements OnInit {
         distance: "0"
       }
     }
-  }
-
-  async getUsersWithLocation(users: User[]) {
-    const currLoc = this.firebaseService.getStorage(STORAGE.LOCATION);
-    const loc = {lat: currLoc.lat, lng: currLoc.lng};
-
-    console.log("Loc users ", loc);
-    
-    this.locationService.applyHaversine(users, loc.lat, loc.lng).forEach((u: any) => {
-      this.users = u;
-    });    
-  } 
-  
-  ngAfterViewInit() {
-    this.cards.changes.subscribe(r =>{
-      const cardArray = this.cards.toArray();      
-      this.gestureCtrlService.useSwiperGesture(cardArray); 
-    });
   }
 
   async updateUserPreference(pref: string) {   

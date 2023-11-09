@@ -373,8 +373,8 @@ export class FirebaseService {
       location: {
           distance: "",
           geo: {
-            lat: 0,
-            lng: 0
+            latitude: 0,
+            longitude: 0
           }
       }
     };
@@ -383,8 +383,10 @@ export class FirebaseService {
     await setDoc(docRef, data, {merge: true});
   }
 
-  async updateUserProfile(collection: string, user: User) {
-    const docRef = doc(this.firestore, collection, user.uid);
+  async updateUserProfile(user: User) {
+    console.log("Update ", user);
+    
+    const docRef = doc(this.firestore, COLLECTION.USERS, user.uid);
     await setDoc(docRef, user, {merge: true});
   }
 

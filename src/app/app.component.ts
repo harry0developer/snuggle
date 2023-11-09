@@ -1,13 +1,12 @@
 import { Component } from '@angular/core'; 
-import { LoadingController, ModalController, Platform } from '@ionic/angular';
+import { ModalController, Platform } from '@ionic/angular';
 import { FirebaseService } from './service/firebase.service';
 import { SplashScreen } from '@capacitor/splash-screen';
 import { Geolocation } from '@capacitor/geolocation';
 import { STORAGE } from './utils/const';
-import { LatLng } from './models/models';
 import { LocationPage } from './pages/location/location.page';
-import { error } from 'console';
-
+import { NativeGeocoder, ReverseOptions } from '@capgo/nativegeocoder';
+import { Location } from './models/models';
 
 @Component({
   selector: 'app-root',
@@ -15,20 +14,19 @@ import { error } from 'console';
   styleUrls: ['app.component.scss'],
 })
 export class AppComponent{
-  location: any;
+  location: Location;
 
   constructor(
     private platform: Platform, 
     private firebaseService: FirebaseService,
-    private modalCtrl: ModalController
+    private modalCtrl: ModalController,
     ) {
     this.platform.ready().then(() => { 
       this.getCurrentLocation().then((res: any) => {
-        const latLng:LatLng = {
-          lat: res.coords.latitude,
-          lng: res.coords.longitude
-        };
-        this.firebaseService.setStorage(STORAGE.LOCATION, latLng);
+        console.log("Address ", res);
+        // this.getAddressFromCoordinates(res.coords.latitude, res.coords.longitude);
+        this.setGeo(res.coords.latitude, res.coords.longitude);
+        
       }).catch(error => {
         console.log("Error ", error);
         this.showGeoLocationErroModal();
@@ -36,7 +34,25 @@ export class AppComponent{
     })
   }
 
-  
+  setGeo(latitude: number, longitude: number) {
+    this.firebaseService.setStorage(STORAGE.GEO, {latitude, longitude});
+  }
+
+  // async getAddressFromCoordinates(latitude: number, longitude: number) {
+  //   const latLng: ReverseOptions = {
+  //     latitude,
+  //     longitude, 
+  //     apiKey: 'AIzaSyD2w1H2MKOBgl-C6Bb1EwwY19mK5cdIy-w',
+  //     maxResults: 1
+  //   }
+  //   await NativeGeocoder.reverseGeocode(latLng).then(res => {
+  //     console.log("Location res", res.addresses[0])
+  //     this.firebaseService.setStorage(STORAGE.LOCATION, res.addresses[0]);
+  //   }).catch(err => {
+  //     console.log("Error ", err);
+  //   })
+  // }
+ 
   async showGeoLocationErroModal() {
     const modal = await this.modalCtrl.create({
       component: LocationPage,
@@ -45,11 +61,8 @@ export class AppComponent{
     const { data, role } = await modal.onWillDismiss();
     if (role === 'retry') {
       this.getCurrentLocation().then((res: any) => {
-        const latLng:LatLng = {
-          lat: res.coords.latitude,
-          lng: res.coords.longitude
-        };
-        this.firebaseService.setStorage(STORAGE.LOCATION, latLng);
+        this.setGeo(res.coords.latitude, res.coords.longitude);
+        // this.getAddressFromCoordinates(res.coords.latitude, res.coords.longitude);
       }).catch(error => {
         this.showGeoLocationErroModal();
         console.log("Error ", error);

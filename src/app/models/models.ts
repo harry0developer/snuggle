@@ -11,10 +11,22 @@ export interface Flags {
     code: string;
 }
 
-export interface LatLng{
-    lat: number,
-    lng: number
+export interface Location{
+    administrativeArea: string;
+    areasOfInterest: string;
+    countryCode: string;
+    countryName: string;
+    latitude: number;
+    longitude: number;
+    locality: string;
+    postalCode: string;
+    subAdministrativeArea: string; 
+    subLocality: string;
+    subThoroughfare: string;
+    thoroughfare: string;
 }
+
+
 export interface User {
     uid: string;
     name: string;
@@ -34,13 +46,14 @@ export interface User {
     lastMsg?: Message;
     location: {
         distance: string;
-        geo: Geo
+        geo: Geo,
+        address?: string
     }
  }
-
+ 
  export interface Geo {
-   lat: number,
-   lng: number;
+    latitude: number;
+    longitude: number
  }
 
  export interface Message {
@@ -74,12 +87,7 @@ export interface MessageObj {
     message: string;
     timestamp: any;
     uid?: string;
-}
-
- export interface Location {
-    lat: number;
-    lng: number;
-}
+} 
 
 export interface Filter {
     category: string;

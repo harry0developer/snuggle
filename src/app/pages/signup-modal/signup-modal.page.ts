@@ -157,8 +157,8 @@ export class SignupModalPage implements OnInit {
       location: {
         distance: "",
         geo: {
-          lat: 0,
-          lng: 0
+          latitude: 0,
+          longitude: 0
         }
       }
     }; 
@@ -171,8 +171,8 @@ export class SignupModalPage implements OnInit {
     const user = await this.firebaseService.createAccountWithEmailAndPassword(this.email, this.password);
     if(!!user && user.user.uid) {
       this.user.uid = user.user.uid;
-      this.user.location.geo.lat = location.lat;
-      this.user.location.geo.lng = location.lng;
+      this.user.location.geo.latitude = location.latitude;
+      this.user.location.geo.longitude = location.longitude;
       this.user.isVerified = user.user.emailVerified;
       this.firebaseService.addDocumentToFirebaseWithCustomID(COLLECTION.USERS, this.user).then(res => {
         loading.dismiss();

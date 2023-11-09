@@ -77,36 +77,8 @@ export class ChatService {
     if(!docId) {
       docId = `${this.auth.currentUser.uid}__${reciever_uid}`
     }
-
-
-    // console.log("Doc id", docId, " msg: ", msg, " rec id: ", reciever_uid);
     
     return await this.afs.collection<MessageObj>(COLLECTION.CHATS).doc(docId).set(msg, {merge: true});
-  }
-
-  addTempUsers() {
-    let user: User  = { 
-      uid: "",
-      email: "wayne@test.com",
-      name: "Wayne",
-      gender: "Male",
-      want: ["Friends With Benefits", "One Night Stand", "No Strings Attached"],
-      with: [ "Female"],
-      dob: "1995-01-01T00:21:00+02:00",
-      profile_picture: "https://firebasestorage.googleapis.com/v0/b/hooked-3b11c.appspot.com/o/images%2F0tLRwFVa0chqT18TF50IWtOnjaz2%2F1676667401059.jpeg?alt=media&token=64d04cd1-6624-4824-a00d-a9ed4989147e",
-      images: [],
-      password: "123456",
-      isVerified: false,
-      loginType: LOGIN_TYPE.EMAIL,
-      location: {
-        distance: "",
-        geo: {
-          lat: 0,
-          lng: 0
-        }
-      }
-    }; 
-    this.afs.collection<User>(COLLECTION.USERS).add(user)
   }
 
   getData(collection: string, limit: number = 100) {

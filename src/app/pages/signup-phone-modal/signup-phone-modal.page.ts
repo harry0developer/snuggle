@@ -129,7 +129,7 @@ export class SignupPhoneModalPage implements OnInit {
     userData.uid = user?.uid;
     
     if(userData.uid) {
-      this.firebaseService.updateUserProfile(COLLECTION.USERS, userData).then(res => {
+      this.firebaseService.updateUserProfile(userData).then(res => {
         loading.dismiss();
         this.modalCtrl.dismiss().then(() => this.router.navigateByUrl(ROUTES.USERS, {replaceUrl:true}));
       }).catch(err => {

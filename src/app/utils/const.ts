@@ -78,6 +78,7 @@ export const STORAGE = {
     USERS: 'users',
     SEEN_INTRO: 'seen-intro',
     LOCATION: 'location',
+    GEO: 'geo',
     SWIPES: 'swipes',
     PREFERENCES: 'preferences'
 }

@@ -14,6 +14,8 @@ import { SigninPhoneModalPage } from '../signin-phone-modal/signin-phone-modal.p
   styleUrls: ['./auth.page.scss'],
 })
 export class AuthPage implements OnInit {
+
+  address: any;
   constructor( 
     public actionSheetController: ActionSheetController, 
     private modalCtrl: ModalController, 
@@ -25,7 +27,7 @@ export class AuthPage implements OnInit {
     const seenIntro = this.firebaseServcice.getStorage(STORAGE.SEEN_INTRO);
     if(!seenIntro) {
       this.router.navigateByUrl(ROUTES.INTRO);
-    }
+    }    
   } 
 
   async openEmailSignupModal() {

@@ -39,7 +39,7 @@ export class ReAuthPage implements OnInit {
     onAuthStateChanged(getAuth(), (user: any) => {
       this.verification.emailVerified = user.emailVerified;
       this.user.isVerified = user.emailVerified;
-      this.firebaseServcice.updateUserProfile(COLLECTION.USERS, this.user).then(() => {
+      this.firebaseServcice.updateUserProfile(this.user).then(() => {
         this.firebaseServcice.setStorage(STORAGE.USER,this.user);
       })
       
